@@ -196,6 +196,7 @@ function startIncrementer()
 {
 setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);}, 1000);
 setInterval(function (){hwDone = pencilBuilding * 0.2 + dogBuilding + computerBuilding * 5 + libraryBuilding * 12 + tutorBuilding * 69 + instituteBuilding * 365 + lavaBuilding * 2015 + hwDone;}, 1000);
+loadSave(); //Load in the latest save, details in the "load save" script
 }
 /*========================================================
 					BUILDING SCRIPTS
@@ -374,9 +375,28 @@ var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCo
 
 function saveGame()
 {
+var buildingLoopIndex = 0
 var saveNoEncrypt = 
-parseInt(Math.floor(hwDone))+';'+
-parseInt(pagesPerSecond.toFixed(1))+';'+;
+parseInt(Math.floor(hwDone))+";"+
+pagesPerSecond +";";
+	while (buildingLoopIndex < buildingAmountArray.length) 
+	{
+	saveNoEncrypt = saveNoEncrypt + buildingAmountArray[buildingLoopIndex]+";";
+	buildingLoopIndex++;
+	}
+saveNoEncrypt=escape(saveNoEncrypt);    //convert symbols to weird stuff
+window.localStorage.setItem(HwClickerSave,saveNoEncrypt); //aaand save
+}
+/*========================================================
+					LOADING SAVES
+========================================================*/
+
+function loadSave()
+{
+var localStorage = window.localStorage.getItem(HwClickerSave);
+saveNoEncrypt = unescape(localStorage)
+var splitSave = str.split(';')
+hwDone = parseInt(splitSave[0]);
 }
 </script>
 </head>
