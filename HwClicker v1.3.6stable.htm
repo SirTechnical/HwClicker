@@ -182,7 +182,7 @@ text-align:left;
 					MAIN SCRIPTS
 ========================================================*/
 
-//Increment Homework Done when button is clicked on
+//Increment Homework Done when image is clicked on
 var hwDone=0; 
 var pagesPerSecond=0;
 function doHw()
@@ -218,7 +218,9 @@ if (hwDone < pencilCost) {
 		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
 		document.getElementById("pencilBuildingDisplay").innerHTML = pencilBuilding;
 		pencilCost = 25 * Math.pow(1.15, pencilBuilding)
-		document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + pencilCost.toFixed() + " Pages";
+		pencilCost = pencilCost.toFixed();
+		document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + pencilCost + " Pages";
+		createBuildingArray();
     }
 }
 
@@ -239,7 +241,9 @@ if (hwDone < dogCost) {
 		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
 		document.getElementById("dogBuildingDisplay").innerHTML = dogBuilding;
 		dogCost = 101 * Math.pow(1.15, dogBuilding)
-		document.getElementById("dogCostDisplay").innerHTML = "Cost: " + dogCost.toFixed() + " Pages";
+		dogCost = dogCost.toFixed();
+		document.getElementById("dogCostDisplay").innerHTML = "Cost: " + dogCost + " Pages";
+		createBuildingArray();
     }
 }
 
@@ -260,7 +264,9 @@ if (hwDone < computerCost) {
 		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
 		document.getElementById("computerBuildingDisplay").innerHTML = computerBuilding;
 		computerCost = 442 * Math.pow(1.15, computerBuilding)
-		document.getElementById("computerCostDisplay").innerHTML = "Cost: " + computerCost.toFixed() + " Pages";
+		computerCost = computerCost.toFixed();
+		document.getElementById("computerCostDisplay").innerHTML = "Cost: " + computerCost + " Pages";
+		createBuildingArray();
     }
 }
 
@@ -281,7 +287,9 @@ if (hwDone < libraryCost) {
 		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
 		document.getElementById("libraryBuildingDisplay").innerHTML = libraryBuilding;
 		libraryCost = 1027 * Math.pow(1.15, libraryBuilding)
-		document.getElementById("libraryCostDisplay").innerHTML = "Cost: " + libraryCost.toFixed() + " Pages";
+		libraryCost = libraryCost.toFixed();
+		document.getElementById("libraryCostDisplay").innerHTML = "Cost: " + libraryCost + " Pages";
+		createBuildingArray();
     }
 }
 
@@ -302,7 +310,9 @@ if (hwDone < tutorCost) {
 		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
 		document.getElementById("tutorBuildingDisplay").innerHTML = tutorBuilding;
 		tutorCost = 5678 * Math.pow(1.15, tutorBuilding)
-		document.getElementById("tutorCostDisplay").innerHTML = "Cost: " + tutorCost.toFixed() + " Pages";
+		tutorCost = tutorCost.toFixed();
+		document.getElementById("tutorCostDisplay").innerHTML = "Cost: " + tutorCost + " Pages";
+		createBuildingArray();
     }
 }
 
@@ -323,7 +333,9 @@ if (hwDone < instituteCost) {
 		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
 		document.getElementById("instituteBuildingDisplay").innerHTML = instituteBuilding;
 		instituteCost = 30000 * Math.pow(1.15, instituteBuilding)
-		document.getElementById("instituteCostDisplay").innerHTML = "Cost: " + instituteCost.toFixed() + " Pages";
+		instituteCost = instituteCost.toFixed();
+		document.getElementById("instituteCostDisplay").innerHTML = "Cost: " + instituteCost + " Pages";
+		createBuildingArray();
     }
 }
 
@@ -344,10 +356,18 @@ if (hwDone < lavaCost) {
 		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
 		document.getElementById("lavaBuildingDisplay").innerHTML = lavaBuilding;
 		lavaCost = 169690 * Math.pow(1.15, lavaBuilding)
-		document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost.toFixed() + " Pages";
+		lavaCost = lavaCost.toFixed();
+		document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost + " Pages";
+		createBuildingArray();
     }
 }
 
+//Converting building variables into arrays
+function createBuildingArray()
+{
+var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
+var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
+}
 /*========================================================
 					WRITING SAVES
 ========================================================*/
@@ -355,6 +375,8 @@ if (hwDone < lavaCost) {
 function saveGame()
 {
 var saveNoEncrypt = 
+parseInt(Math.floor(hwDone))+';'+
+parseInt(pagesPerSecond.toFixed(1))+';'+;
 }
 </script>
 </head>
