@@ -178,11 +178,11 @@ text-align:left;
 <link rel="shortcut icon" href="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no"/>
 
 <script type="text/javascript">
-															////////////////
-															//Main scripts//
-															////////////////
-{
-<!-- Increment Homework Done when button is clicked on -->
+/*========================================================
+					MAIN SCRIPTS
+========================================================*/
+
+//Increment Homework Done when button is clicked on
 var hwDone=0; 
 var pagesPerSecond=0;
 function doHw()
@@ -191,18 +191,17 @@ hwDone++;
 document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);
 }
 
-<!--Increment Homework Done every second, add it to the hwDoneDisplay -->
+//Increment Homework Done every second, add it to the hwDoneDisplay
 function startIncrementer()
 {
 setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);}, 1000);
 setInterval(function (){hwDone = pencilBuilding * 0.2 + dogBuilding + computerBuilding * 5 + libraryBuilding * 12 + tutorBuilding * 69 + instituteBuilding * 365 + lavaBuilding * 2015 + hwDone;}, 1000);
 }
-}
-															////////////////////
-															//Building scripts//
-															////////////////////
-{
-<!-- Pencil script -->
+/*========================================================
+					BUILDING SCRIPTS
+========================================================*/
+
+//Pencil script
 var pencilBuilding=0;
 var pencilCost=25;
 function buyPencil()
@@ -223,7 +222,7 @@ if (hwDone < pencilCost) {
     }
 }
 
-<!-- Dog script -->
+//Dog script
 var dogBuilding=0;
 var dogCost=101;
 function buyDog()
@@ -244,7 +243,7 @@ if (hwDone < dogCost) {
     }
 }
 
-<!-- Computer script -->
+//Computer script
 var computerBuilding=0;
 var computerCost=442;
 function buyComputer()
@@ -265,7 +264,7 @@ if (hwDone < computerCost) {
     }
 }
 
-<!-- Library script -->
+//Library script
 var libraryBuilding=0;
 var libraryCost=1027;
 function buyLibrary()
@@ -286,7 +285,7 @@ if (hwDone < libraryCost) {
     }
 }
 
-<!-- Tutor script -->
+//Tutor script
 var tutorBuilding=0;
 var tutorCost=5678;
 function buyTutor()
@@ -307,7 +306,7 @@ if (hwDone < tutorCost) {
     }
 }
 
-<!-- Research Institute script -->
+//Research Institute script
 var instituteBuilding=0;
 var instituteCost=30000;
 function buyInstitute()
@@ -328,7 +327,7 @@ if (hwDone < instituteCost) {
     }
 }
 
-<!-- Lava script -->
+//Lava script
 var lavaBuilding=0;
 var lavaCost=169690;
 function buyLava()
@@ -348,16 +347,14 @@ if (hwDone < lavaCost) {
 		document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost.toFixed() + " Pages";
     }
 }
-}
 
-															/////////////////
-															//Writing Saves//
-															/////////////////
-{
+/*========================================================
+					WRITING SAVES
+========================================================*/
+
 function saveGame()
 {
 var saveNoEncrypt = 
-}
 }
 </script>
 </head>
