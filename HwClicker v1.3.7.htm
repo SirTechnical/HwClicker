@@ -2,7 +2,10 @@
 <head>
 <title>Homework Clicker v1.3</title>
 <link rel="shortcut icon" href="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no"/>
-<!--  <link rel="stylesheet" type="text/css" href="HwClicker Styles v1.1.css">  -->
+
+<!--  <link rel="stylesheet" type="text/css" href="HwClicker Styles v1.1.css">  
+    Note: Remove this if you want to use external style sheets, but for now leave it like this. -->
+
 <style type="text/css">
 <!--  HwClicker Style Sheet v1.1 Don't ask. -->
 <!--  	Credits of Homework Clicker:
@@ -253,14 +256,14 @@ hwDone++;
 document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);
 }
 
-//Increment Homework Done every second, add it to the hwDoneDisplay
+//Increment Homework Done at a bit less than 30 fps, add it to the hwDoneDisplay
 function startIncrementer()
 {
 setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);}, 40); //Updates every 40 milliseconds
 setInterval(function (){hwDone = pencilBuilding * 0.01 + hwDone;}, 50);
 setInterval(function (){hwDone = dogBuilding * 0.05 + hwDone}, 50);
 setInterval(function (){hwDone = computerBuilding * 0.25 + hwDone}, 50);
-setInterval(function (){hwDone = libraryBuilding + hwDone}, 83.33333);
+setInterval(function (){hwDone = libraryBuilding + hwDone}, 83.33333);            //good enough fps for you?
 setInterval(function (){hwDone = tutorBuilding * 3 + hwDone}, 43.47826);
 setInterval(function (){hwDone = instituteBuilding * 20 + hwDone}, 54.79452);
 setInterval(function (){hwDone = lavaBuilding * 100 + hwDone}, 49.62779);
@@ -462,7 +465,7 @@ localStorage.setItem("hwClickerSave", myD); //aaand save
 function loadSave()
 {
 //document.write(localStorage.getItem("hwClickerSave"));
-//alert(localStorage.getItem("hwClickerSave"));
+alert(localStorage.getItem("hwClickerSave"));
 /*
 var localStorageTemp = localStorage.HwClickerSave;
 var saveNoEncrypt = unescape(localStorageTemp)
