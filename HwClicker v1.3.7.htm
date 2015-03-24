@@ -437,8 +437,8 @@ if (hwDone < lavaCost) {
 //Converting building variables into arrays
 function createBuildingArray()
 {
-var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
-var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
+//var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
+
 }
 /*========================================================
 					WRITING SAVES
@@ -446,17 +446,21 @@ var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCo
 
 function saveGame()
 {
-var buildingLoopIndex = 0
-var saveNoEncrypt = parseInt(Math.floor(hwDone))+";"+
-parseInt(pagesPerSecond) +";";
-	while (buildingLoopIndex < buildingAmountArray.length) 
+var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
+var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
+var saveNoEncrypt = 
+parseInt(Math.floor(hwDone))+";"+ //add hw already done
+parseInt(pagesPerSecond) +";"; //add current pps
+	for (buildingLoopIndex = 0; buildingLoopIndex < buildingAmountArray.length; buildingLoopIndex++) 
 	{
-	saveNoEncrypt += buildingAmountArray[buildingLoopIndex]+";";
-	buildingLoopIndex++;
+	saveNoEncrypt += buildingAmountArray[buildingLoopIndex]+";"; //add all the building amounts
+	}
+	for (buildingCostLoopIndex = 0; buildingCostLoopIndex < buildingCostArray.length; buildingCostLoopIndex++) 
+	{
+	saveNoEncrypt += buildingCostArray[buildingCostLoopIndex]+";"; //add all the building cost amounts
 	}
 saveNoEncrypt = escape(saveNoEncrypt);    //convert symbols to weird stuff 
-//localStorage.setItem("hwClickerSave", saveNoEncrypt); //aaand save
-window.localStorage.setItem(hwClickerSave,saveNoEncrypt);
+window.localStorage.setItem("hwClickerSave",saveNoEncrypt); //aaand save
 }
 /*========================================================
 					LOADING SAVES
@@ -464,13 +468,10 @@ window.localStorage.setItem(hwClickerSave,saveNoEncrypt);
 
 function loadSave()
 {
-//document.write(localStorage.getItem("hwClickerSave"));
-//alert(localStorage.getItem("hwClickerSave"));
-/*
-var localStorageTemp = localStorage.HwClickerSave;
-var saveNoEncrypt = unescape(localStorageTemp)
-var splitSave = saveNoEncrypt.split(';')
-hwDone = parseInt(splitSave[0]);*/
+var retrieveSave = localStorage.getItem("hwClickerSave");  //getting the save
+retrieveSave = unescape(retrieveSave);   //converting weird stuff to symbols
+var splitSave = saveNoEncrypt.split(';')  //splitting it by ;
+hwDone = parseInt(splitSave[0]);  //giving the first resulting amount to the hwDone
 }
 </script>
 
