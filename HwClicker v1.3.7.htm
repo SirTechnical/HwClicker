@@ -229,7 +229,7 @@ height:100px;
 //hmm how do i add a doctype?
 
 /* All code contained was made by Kevin G. with help from Michael S. and design from Jeffery L. and Edwin Z.
-	This may not be the cleanest or most efficient code, but it works.
+	This may not be the cleanest or most efficient code, but it works. (correction: is not the cleanest code)
 	Mostly.
 	Pleaaaase do not steal code from here without permission. (anyway, who would want to steal this code?)
 	
@@ -451,12 +451,12 @@ var saveNoEncrypt = parseInt(Math.floor(hwDone))+";"+
 parseInt(pagesPerSecond) +";";
 	while (buildingLoopIndex < buildingAmountArray.length) 
 	{
-	saveNoEncrypt = saveNoEncrypt + buildingAmountArray[buildingLoopIndex]+";";
+	saveNoEncrypt += buildingAmountArray[buildingLoopIndex]+";";
 	buildingLoopIndex++;
 	}
 saveNoEncrypt = escape(saveNoEncrypt);    //convert symbols to weird stuff 
-var myD=69;
-localStorage.setItem("hwClickerSave", myD); //aaand save
+//localStorage.setItem("hwClickerSave", saveNoEncrypt); //aaand save
+window.localStorage.setItem(hwClickerSave,saveNoEncrypt);
 }
 /*========================================================
 					LOADING SAVES
