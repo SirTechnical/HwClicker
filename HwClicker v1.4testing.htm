@@ -1,0 +1,790 @@
+<html><!--I'm not gonna add a doctype because it screws up the document-->
+<head>
+<title>Homework Clicker v1.4</title>
+<link rel="shortcut icon" href="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no"/>
+
+<!--  <link rel="stylesheet" type="text/css" href="HwClicker Styles v1.1.css">  
+    Note: Remove this if you want to use external style sheets, but for now leave it like this. -->
+
+<style type="text/css">
+<!--  HwClicker Style Sheet v1.1 Don't ask. -->
+<!--  	Credits of Homework Clicker:
+		-Upgrade/Achievement/Description Maker: Edwin Z.
+		-Creative Guy: Jeffery L.
+		-Artist: Tian Z.
+		-Super Necessary Important Vital Rock to the Game: Michael S.
+		-Script writer: Kevin G.                               -->
+
+
+<!-- Word/Header Styles -->
+#updateheader
+{
+font-family:Calibri;
+color:6495ed;
+}
+li
+{
+font-family:Calibri;
+color:00bfff;
+}
+p
+{
+font-family:Calibri;
+color:00bfff;
+}
+q
+{
+font-family:Calibri;
+color:663300;
+}
+#newsTicker
+{
+font-family:Calibri;
+color:663300;
+font-size:20;
+}
+#hwDoneDisplay
+{
+font-family:Calibri;
+color:B0C0D0;
+}
+h3
+{
+font-family:Calibri;
+color:B0C0D0;
+}
+h2
+{
+font-family:Calibri;
+color:B0C0D0;
+}
+h4
+{
+font-family:Calibri;
+color:B0C0D0;
+}
+#ppsDisplay
+{
+font-family:Calibri;
+color:C0D0F0;
+}
+#headertitle
+{
+font-family:Calibri;
+color:1a1a1a;
+}
+#shopHeader
+{
+font-family:Calibri;
+color:1a1a1a;
+}
+#interfaceHeader
+{
+font-family:Calibri;
+color:1a1a1a;
+}
+#loading
+{
+font-family:Calibri;
+color:1a1a1a;
+}
+#messages
+{
+font-family:Calibri;
+color:999900;
+}
+<!-- DIV styles start here -->
+#header 
+{
+background-color:black;
+color:white;
+text-align:center;
+padding:5px;
+}
+#hwHolder 
+{
+line-height:30px;
+background-color:#eeeeee;
+height:551px;
+width:400px;
+float:left;
+padding:5px;	      
+}
+#statsSection 
+{
+border-left-style: solid;
+border-width: 1px;
+width:450px;
+height:551px;
+float:left;
+}
+#shop 
+{
+background-color:#99FFCC;
+width:390px;
+height:521px;
+float:right;
+padding:10px;
+overflow: scroll;	 	 
+}
+#shopWrap
+{
+border-left-style: solid;
+border-width: 1px;
+background-color:#99FFCC;
+width:400px;
+height:551px;
+float:right;
+padding:10px;
+}
+#interfaceElementHolder
+{
+background-color:#99FF99;
+height:461px;
+overflow: scroll;
+}
+<!-- Shop Element styles start here -->
+#buildingDescription
+{
+color:0000FF;
+}
+#buildingImage
+{
+float:left;
+}
+#pencilBuildingDisplay
+{
+float:right;
+font-family:Calibri;
+color:B0C0D0;
+}
+#dogBuildingDisplay
+{
+float:right;
+font-family:Calibri;
+color:B0C0D0;
+}
+#computerBuildingDisplay
+{
+float:right;
+font-family:Calibri;
+color:B0C0D0;
+}
+#libraryBuildingDisplay
+{
+float:right;
+font-family:Calibri;
+color:B0C0D0;
+}
+#tutorBuildingDisplay
+{
+float:right;
+font-family:Calibri;
+color:B0C0D0;
+}
+#instituteBuildingDisplay
+{
+float:right;
+font-family:Calibri;
+color:B0C0D0;
+}
+#lavaBuildingDisplay
+{
+float:right;
+font-family:Calibri;
+color:B0C0D0;
+}
+<!--Table Styles Start Here -->
+td
+{
+text-align:left;
+}
+#interfaceMenuFrame
+{
+width:510px;
+height:100px;
+text-align:center;
+}
+#toggleMenuHolder
+{
+background-color:FFFF66;
+}
+#toggleStatsHolder
+{
+background-color:FFFF66;
+}
+#newsHolder
+{
+background-color:99CCFF;
+height:100px;
+}
+<!-- Misc. Styles Start here -->
+
+</style>
+<script type="text/javascript">
+/* All code contained was made by Kevin G. with help from Michael S. and design from Jeffery L. and Edwin Z.
+	This may not be the cleanest or most efficient code, but it works. (correction: is not the cleanest code)
+	Mostly.
+	Pleaaaase do not steal code from here without permission. (anyway, who would want to steal this code?)
+	
+	Credits of Homework Clicker:
+		-Upgrade/Achievement/Description Maker: Edwin Z.
+		-Creative Guy: Jeffery L.
+		-Super Necessary Important Vital Rock to the Game: Michael S.
+		-Artist: Tian Z.
+		-Script writer: Kevin G.																			*/
+
+
+
+
+
+/*========================================================
+					MAIN SCRIPTS
+========================================================*/
+
+//Increment Homework Done when image is clicked on
+var hwDone=0; 
+var pagesPerSecond=0;
+function doHw()
+{
+hwDone++;
+document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);
+}
+
+//Increment Homework Done at a bit less than 30 fps, add it to the hwDoneDisplay
+function startIncrementer()
+{
+setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);}, 40); //Updates every 40 milliseconds
+setInterval(function (){hwDone = pencilBuilding * 0.01 + hwDone;}, 50);
+setInterval(function (){hwDone = dogBuilding * 0.05 + hwDone}, 50);
+setInterval(function (){hwDone = computerBuilding * 0.25 + hwDone}, 50);
+setInterval(function (){hwDone = libraryBuilding + hwDone}, 83.33333);            //good enough fps for you?
+setInterval(function (){hwDone = tutorBuilding * 3 + hwDone}, 43.47826);
+setInterval(function (){hwDone = instituteBuilding * 20 + hwDone}, 54.79452);
+setInterval(function (){hwDone = lavaBuilding * 100 + hwDone}, 49.62779);
+loadSave(); //Load in the latest save, details in the "load save" script
+viewMenu(); //Change the middle section to the menu
+}
+
+function reset()       //Make sure people don't accidentally reset
+{
+var reset = prompt('Are you sure you want to reset? Enter "Yes" in the form below to comfirm');
+if (reset === "Yes") {
+		trueReset();
+	}
+	else {
+//do nothing
+    }
+	
+function trueReset()	//Real resetting
+{
+hwDone = 0;
+pagesPerSecond = 0;
+pencilBuilding = 0;
+dogBuilding = 0;
+computerBuilding = 0;
+libraryBuilding = 0;
+tutorBuilding = 0;
+instituteBuilding = 0;
+lavaBuilding = 0;
+pencilCost = 25;
+dogCost = 101;
+computerCost = 442;
+libraryCost = 1027;
+tutorCost = 5678;
+instituteCost = 30000;
+lavaCost = 169690;
+
+document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond;
+document.getElementById("pencilBuildingDisplay").innerHTML = pencilBuilding;
+document.getElementById("dogBuildingDisplay").innerHTML = dogBuilding;
+document.getElementById("computerBuildingDisplay").innerHTML = computerBuilding;
+document.getElementById("libraryBuildingDisplay").innerHTML = libraryBuilding;
+document.getElementById("tutorBuildingDisplay").innerHTML = tutorBuilding;
+document.getElementById("instituteBuildingDisplay").innerHTML = instituteBuilding;
+document.getElementById("lavaBuildingDisplay").innerHTML = lavaBuilding;
+
+document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + pencilCost + " Pages";
+document.getElementById("dogCostDisplay").innerHTML = "Cost: " + dogCost + " Pages";
+document.getElementById("computerCostDisplay").innerHTML = "Cost: " + computerCost + " Pages";
+document.getElementById("libraryCostDisplay").innerHTML = "Cost: " + libraryCost + " Pages";
+document.getElementById("tutorCostDisplay").innerHTML = "Cost: " + tutorCost + " Pages";
+document.getElementById("instituteCostDisplay").innerHTML = "Cost: " + instituteCost + " Pages";
+document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost + " Pages";
+}
+/*========================================================
+					BUILDING SCRIPTS
+========================================================*/
+
+//Pencil script
+var pencilBuilding=0;
+var pencilCost=25;
+function buyPencil()
+{
+if (hwDone < pencilCost) {
+        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+    } else {
+        document.getElementById("messages").innerHTML = "You bought a pencil!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+		pencilBuilding++;
+		hwDone = hwDone - pencilCost;
+		pagesPerSecond = 0.2 + pagesPerSecond;
+		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
+		document.getElementById("pencilBuildingDisplay").innerHTML = pencilBuilding;
+		pencilCost = 25 * Math.pow(1.15, pencilBuilding)
+		pencilCost = pencilCost.toFixed();
+		document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + pencilCost + " Pages";
+    }
+}
+
+//Dog script
+var dogBuilding=0;
+var dogCost=101;
+function buyDog()
+{
+if (hwDone < dogCost) {
+        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+    } else {
+        document.getElementById("messages").innerHTML = "You bought a dog!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+		dogBuilding++;
+		hwDone = hwDone - dogCost;
+		pagesPerSecond = pagesPerSecond + 1;
+		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
+		document.getElementById("dogBuildingDisplay").innerHTML = dogBuilding;
+		dogCost = 101 * Math.pow(1.15, dogBuilding)
+		dogCost = dogCost.toFixed();
+		document.getElementById("dogCostDisplay").innerHTML = "Cost: " + dogCost + " Pages";
+    }
+}
+
+//Computer script
+var computerBuilding=0;
+var computerCost=442;
+function buyComputer()
+{
+if (hwDone < computerCost) {
+        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+    } else {
+        document.getElementById("messages").innerHTML = "You bought a computer!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+		computerBuilding++;
+		hwDone = hwDone - computerCost;
+		pagesPerSecond = pagesPerSecond + 5;
+		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
+		document.getElementById("computerBuildingDisplay").innerHTML = computerBuilding;
+		computerCost = 442 * Math.pow(1.15, computerBuilding)
+		computerCost = computerCost.toFixed();
+		document.getElementById("computerCostDisplay").innerHTML = "Cost: " + computerCost + " Pages";
+    }
+}
+
+//Library script
+var libraryBuilding=0;
+var libraryCost=1027;
+function buyLibrary()
+{
+if (hwDone < libraryCost) {
+        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+    } else {
+        document.getElementById("messages").innerHTML = "You bought an entire library!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+		libraryBuilding++;
+		hwDone = hwDone - libraryCost;
+		pagesPerSecond = pagesPerSecond + 12;
+		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
+		document.getElementById("libraryBuildingDisplay").innerHTML = libraryBuilding;
+		libraryCost = 1027 * Math.pow(1.15, libraryBuilding)
+		libraryCost = libraryCost.toFixed();
+		document.getElementById("libraryCostDisplay").innerHTML = "Cost: " + libraryCost + " Pages";
+    }
+}
+
+//Tutor script
+var tutorBuilding=0;
+var tutorCost=5678;
+function buyTutor()
+{
+if (hwDone < tutorCost) {
+        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+    } else {
+        document.getElementById("messages").innerHTML = "You hired a tutor!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+		tutorBuilding++;
+		hwDone = hwDone - tutorCost;
+		pagesPerSecond = pagesPerSecond + 69;
+		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
+		document.getElementById("tutorBuildingDisplay").innerHTML = tutorBuilding;
+		tutorCost = 5678 * Math.pow(1.15, tutorBuilding)
+		tutorCost = tutorCost.toFixed();
+		document.getElementById("tutorCostDisplay").innerHTML = "Cost: " + tutorCost + " Pages";
+    }
+}
+
+//Research Institute script
+var instituteBuilding=0;
+var instituteCost=30000;
+function buyInstitute()
+{
+if (hwDone < instituteCost) {
+        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+    } else {
+        document.getElementById("messages").innerHTML = "You bought your own research institute!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+		instituteBuilding++;
+		hwDone = hwDone - instituteCost;
+		pagesPerSecond = pagesPerSecond + 365;
+		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
+		document.getElementById("instituteBuildingDisplay").innerHTML = instituteBuilding;
+		instituteCost = 30000 * Math.pow(1.15, instituteBuilding)
+		instituteCost = instituteCost.toFixed();
+		document.getElementById("instituteCostDisplay").innerHTML = "Cost: " + instituteCost + " Pages";
+    }
+}
+
+//Lava script
+var lavaBuilding=0;
+var lavaCost=169690;
+function buyLava()
+{
+if (hwDone < lavaCost) {
+        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+    } else {
+        document.getElementById("messages").innerHTML = "You bought a patch of lava!";
+		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+		lavaBuilding++;
+		hwDone = hwDone - lavaCost;
+		pagesPerSecond = pagesPerSecond + 2015;
+		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
+		document.getElementById("lavaBuildingDisplay").innerHTML = lavaBuilding;
+		lavaCost = 169690 * Math.pow(1.15, lavaBuilding)
+		lavaCost = lavaCost.toFixed();
+		document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost + " Pages";
+    }
+}
+
+/*========================================================
+					WRITING SAVES
+========================================================*/
+var saveNoEncrypt;
+function saveGame()
+{
+var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
+var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
+saveNoEncrypt = 
+parseInt(Math.floor(hwDone))+";"+ //add hw already done
+parseFloat(pagesPerSecond) +";"; //add current pps
+	for (buildingLoopIndex = 0; buildingLoopIndex < buildingAmountArray.length; buildingLoopIndex++) 
+	{
+	saveNoEncrypt += buildingAmountArray[buildingLoopIndex]+";"; //add all the building amounts
+	}
+	for (buildingCostLoopIndex = 0; buildingCostLoopIndex < buildingCostArray.length; buildingCostLoopIndex++) 
+	{
+	saveNoEncrypt += buildingCostArray[buildingCostLoopIndex]+";"; //add all the building cost amounts
+	}
+saveNoEncrypt = escape(saveNoEncrypt);    //convert symbols to weird stuff 
+window.localStorage.setItem("hwClickerSave",saveNoEncrypt); //aaand save
+}
+/*========================================================
+					LOADING SAVES
+========================================================*/
+
+function loadSave()
+{
+var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
+var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
+
+var retrieveSave = localStorage.getItem("hwClickerSave");  //getting the save
+retrieveSave = unescape(retrieveSave);   //converting weird stuff to symbols
+var splitSave = retrieveSave.split(";")  //splitting it by ;
+hwDone = parseInt(splitSave[0]);  //giving the first resulting amount to the hwDone
+pagesPerSecond = parseFloat(splitSave[1]);  //giving the second resulting amount to the pagesPerSecond
+pencilBuilding = parseInt(splitSave[2]);  //etc.
+dogBuilding = parseInt(splitSave[3]);
+computerBuilding = parseInt(splitSave[4]);
+libraryBuilding = parseInt(splitSave[5]);
+tutorBuilding = parseInt(splitSave[6]);
+instituteBuilding = parseInt(splitSave[7]);
+lavaBuilding = parseInt(splitSave[8]);
+pencilCost = parseInt(splitSave[9]);
+dogCost = parseInt(splitSave[10]);
+computerCost = parseInt(splitSave[11]);
+libraryCost = parseInt(splitSave[12]);
+tutorCost = parseInt(splitSave[13]);
+instituteCost = parseInt(splitSave[14]);
+lavaCost = parseInt(splitSave[15]);
+
+document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
+document.getElementById("pencilBuildingDisplay").innerHTML = pencilBuilding;
+document.getElementById("dogBuildingDisplay").innerHTML = dogBuilding;
+document.getElementById("computerBuildingDisplay").innerHTML = computerBuilding;
+document.getElementById("libraryBuildingDisplay").innerHTML = libraryBuilding;
+document.getElementById("tutorBuildingDisplay").innerHTML = tutorBuilding;
+document.getElementById("instituteBuildingDisplay").innerHTML = instituteBuilding;
+document.getElementById("lavaBuildingDisplay").innerHTML = lavaBuilding;
+
+document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + pencilCost + " Pages";
+document.getElementById("dogCostDisplay").innerHTML = "Cost: " + dogCost + " Pages";
+document.getElementById("computerCostDisplay").innerHTML = "Cost: " + computerCost + " Pages";
+document.getElementById("libraryCostDisplay").innerHTML = "Cost: " + libraryCost + " Pages";
+document.getElementById("tutorCostDisplay").innerHTML = "Cost: " + tutorCost + " Pages";
+document.getElementById("instituteCostDisplay").innerHTML = "Cost: " + instituteCost + " Pages";
+document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost + " Pages";
+}
+/*========================================================
+					TOGGLE MIDDLE AREA
+========================================================*/
+var menuSection = '<h2 id="updateheader">Menu</h2>'+
+'<p>You are playing Homework Clicker v1.4</p>'+
+'<button onclick="reset()">Reset Game</button>'; //hrm updateheader...
+function viewMenu()
+{
+document.getElementById("interfaceElementHolder").innerHTML = menuSection;
+}
+var statsSectionVar = '<h2 id="updateheader">Stats</h2>';
+function viewStats()
+{
+document.getElementById("interfaceElementHolder").innerHTML = statsSectionVar;
+}
+var updates = '<h2 id="updateheader">Updates:</h2>' + //Updates go here
+'<h4>Version 1.5</h4><ul>' +
+	"<li>Um....Stuff?</li>" +
+'</ul><h4>Version 1.4</h4><ul>' +
+	"<li>Introducing more buildings including the research institute and lava! What are they for? Don't ask.</li>" +
+	'<li>Minor bugfixes such as when buying more than 3 pencils creates many digits behind the decimal point.</li>'+
+	'<li>Inflation! Yes, inflation! Now building become more expensive the more you buy them! Muahahahaha...</li>' +
+	'<li>Many new changes.</li>' +
+	'<li>Many many new changes. Find out for yourself!</li>' +
+'</ul><h4>Version 1.3</h4><ul>' +
+	'<li>BUILDINGS! Now you can buy pencils and libraries just for you to do your homework!</li>' +
+	'<li>New buildings: A pencil, a dog, a computer, a library, and a tutor! They all have descriptions to go with them too.</li>' +
+	'<li>We also have a new layout and soon to be saves...  and there may or may not be inflation in the next version...</li>' +
+'</ul><h4>Version 1.2</h4><ul>' +
+	'<li>No new features yet, but a new look and a framework to speed up future updates!</li>' +
+'</ul><h4>Version 1.1:</h4><ul>' +
+	"<li>Clicking button increases the amount of homework you've done!</li>" +
+'</ul>';
+function viewUpdates()
+{
+document.getElementById("interfaceElementHolder").innerHTML = updates;
+}
+var creditsSection = '<h2 id="updateheader">Credits:</h2>'+
+'<p>-Upgrade/Achievement/Description Maker: Edwin Z.</p>' +
+'<p>-Creative Guy: Jeffery L.</p>' +
+'<p>-Artist: Tian Z.</p>' +
+'<p>-Super Necessary Important Vital Rock to the Game: Michael S.</p>' +
+'<p>-Script Writer: Kevin G.</p>'
+function viewCredits()
+{
+document.getElementById("interfaceElementHolder").innerHTML = creditsSection;
+}
+</script>
+
+<noscript>
+Sorry, your browser does not support JavaScript! Homework Clicker requires JavaScript to run!
+<q>You may have disabled JavaScript in your browser. In that case, enable it, and retry!</q>
+-The Developers
+</noscript>
+</head>
+
+<body onload="startIncrementer()" onunload="saveGame()">
+
+<center>
+<div id="header">
+<h1 id="headertitle">Homework Clicker v1.4</h1>
+</div>
+<hr />
+
+<div id="interfaceWrap">
+<div id="hwHolder">
+<h1 id="hwDoneDisplay">Pages of Homework Done: 0</h1>
+<h4 id="ppsDisplay">Pages per second: 0</h4>
+<p>Click image to do homework</p>
+<img alt="Click to do homework" id="hwImage" src="https://lh6.googleusercontent.com/-F5Cea2oeyBc/VRHeEEzujEI/AAAAAAAACMY/1s9gqe_nf7U/w419-h542-no/homework.jpg" width="250px" height="300px"  onclick="doHw()"/>
+</div>
+
+<div id="statsSection">
+<table id="interfaceMenuFrame" border="0">
+	<tr>
+		<td id="toggleMenuHolder" onclick="viewMenu()">	
+		<h3 id="interfaceHeader">Menu</h3>
+		</td>
+		<td id="newsHolder" rowspan="2">
+		<p id="newsTicker">News (Coming soon!)<br/> -The Developers</p>
+		</td>
+		<td id="toggleStatsHolder" onclick="viewStats()">	
+		<h3 id="interfaceHeader">Stats</h3>
+		</td>
+	</tr>
+	<tr>
+		<td id="toggleMenuHolder" onclick="viewUpdates()">	
+		<h3 id="interfaceHeader">Updates</h3>
+		</td>
+		<td id="toggleStatsHolder" onclick="viewCredits()">	
+		<h3 id="interfaceHeader">Credits</h3>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+		<div id="interfaceElementHolder">
+		<h1 id="loading">Please wait....</h1>
+		</div>
+		</td>
+</table>
+</div>
+
+<div id="shopWrap">
+<div id="shop">
+<h2 id="shopHeader">Shop</h2>
+
+<table>
+	<tr> <!--Pencil Section-->
+		<td>
+<h3>Pencil</h3>
+		</td>
+		<td colspan="2">
+<p id="buildingDescription" color="0000FF">In case you break one.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<img alt="Pencil" id="buildingImage" src="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no" width="50px" height="50px"  onclick="buyPencil()"/>
+		</td>
+		<td>
+		<p id="pencilCostDisplay">Cost: 25 Pages</p>
+		</td>
+		<td>
+<h4 id="pencilBuildingDisplay">0</h4>
+		</td>
+	</tr>
+	<br />
+	<tr> <!--Dog Section-->
+		<td>
+<h3>Dog</h3>
+		</td>
+		<td colspan="2">
+<p id="buildingDescription">A nice dog to eat your homework.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<img alt="Dog" id="buildingImage" src="https://lh6.googleusercontent.com/-p8XUdN0Ihb0/VNR5rrnjhXI/AAAAAAAAAA8/3URGjufliRQ/w1600-h1200/photo.jpg" width="50px" height="50px"  onclick="buyDog()"/>
+		</td>
+		<td>
+		<p id="dogCostDisplay">Cost: 101 Pages</p>
+		</td>
+		<td>
+<h4 id="dogBuildingDisplay">0</h4>
+		</td>
+	</tr>
+<tr> <!--Computer Section-->
+		<td>
+<h3>Computer</h3>
+		</td>
+		<td colspan="2">
+<p id="buildingDescription">Computer + Homework = "Good grades"</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<img alt="Computer" id="buildingImage" src="https://lh3.googleusercontent.com/-F0yEbufozXA/VQDns833VjI/AAAAAAAACJ0/qN5rqsu0of0/w227-h228-p/computer.jpg" width="50px" height="50px"  onclick="buyComputer()"/>
+		</td>
+		<td>
+		<p id="computerCostDisplay">Cost: 442 Pages</p>
+		</td>
+		<td>
+<h4 id="computerBuildingDisplay">0</h4>
+		</td>
+	</tr>
+	<tr> <!--Library Section-->
+		<td>
+<h3>Library</h3>
+		</td>
+		<td colspan="2">
+<p id="buildingDescription">All the information you would possibly need. (and more!)</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<img alt="Library" id="buildingImage" src="https://lh5.googleusercontent.com/-JXqt42yXO3U/VRCxzl5hRbI/AAAAAAAACLA/9-IFLtaOH_U/w269-h162-no/bookshelf.jpg" width="50px" height="50px"  onclick="buyLibrary()"/>
+		</td>
+		<td>
+		<p id="libraryCostDisplay">Cost: 1027 Pages</p>
+		</td>
+		<td>
+<h4 id="libraryBuildingDisplay">0</h4>
+		</td>
+	</tr>
+	<tr> <!--Tutor Section-->
+		<td>
+<h3>Tutor</h3>
+		</td>
+		<td colspan="2">
+<p id="buildingDescription">Who said tutors <i>helped </i>you do homework?</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<img alt="Tutor" id="buildingImage" src="https://tupalo.s3.amazonaws.com/s/tampa-florida/kumon-of-town-and-country-5143518-fe.jpg" width="50px" height="50px"  onclick="buyTutor()"/>
+		</td>
+		<td>
+		<p id="tutorCostDisplay">Cost: 5678 Pages</p>
+		</td>
+		<td>
+<h4 id="tutorBuildingDisplay">0</h4>
+		</td>
+	</tr>
+	<tr> <!--Research Institute Section-->
+		<td>
+<h3>Research Institute</h3>
+		</td>
+		<td colspan="2">
+<p id="buildingDescription">Filled with books, teachers, and nerds. All ready to help on your quest to do your homework.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<img alt="Research Institute" id="buildingImage" src="http://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-580x288/public/news/research/news/121106heart-and-lung-research-institute.jpg?itok=3DfCO5Kl" width="50px" height="50px"  onclick="buyInstitute()"/>
+		</td>
+		<td>
+		<p id="instituteCostDisplay">Cost: 30000 Pages</p>
+		</td>
+		<td>
+<h4 id="instituteBuildingDisplay">0</h4>
+		</td>
+	</tr>
+	<tr> <!--Lava Section-->
+		<td>
+<h3>Lava</h3>
+		</td>
+		<td colspan="2">
+		<p id="buildingDescription">Don't ask.</p>
+		</td>
+	</tr>
+	<tr>
+		<td>
+<img alt="Lava" id="buildingImage" src="http://hydra-media.cursecdn.com/minecraft.gamepedia.com/2/27/Lava.png?version=5a751570cb4de22cba7628f8fe2a3a66" width="50px" height="50px"  onclick="buyLava()"/>
+		</td>
+		<td>
+		<p id="lavaCostDisplay">Cost: 169690 Pages</p>
+		</td>
+		<td>
+<h4 id="lavaBuildingDisplay">0</h4>
+		</td>
+	</tr>
+</table>
+</div>
+<p id="messages"></p>
+</div>
+
+</center>
+</div>
+</body>
+</html>
