@@ -1,4 +1,4 @@
-<html>
+<html><!--I'm not gonna add a doctype because it screws up the document-->
 <head>
 <title>Homework Clicker v1.4</title>
 <link rel="shortcut icon" href="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no"/>
@@ -222,8 +222,6 @@ height:100px;
 
 </style>
 <script type="text/javascript">
-//hmm how do i add a doctype?
-
 /* All code contained was made by Kevin G. with help from Michael S. and design from Jeffery L. and Edwin Z.
 	This may not be the cleanest or most efficient code, but it works. (correction: is not the cleanest code)
 	Mostly.
@@ -268,7 +266,17 @@ loadSave(); //Load in the latest save, details in the "load save" script
 viewMenu(); //Change the middle section to the menu
 }
 
-function reset()
+function reset()       //Make sure people don't accidentally reset
+{
+var reset = prompt('Are you sure you want to reset? Enter "Yes" in the form below to comfirm');
+if (reset === "Yes") {
+		trueReset();
+	}
+	else {
+//do nothing
+    }
+	
+function trueReset()	//Real resetting
 {
 hwDone = 0;
 pagesPerSecond = 0;
@@ -513,7 +521,7 @@ tutorCost = parseInt(splitSave[13]);
 instituteCost = parseInt(splitSave[14]);
 lavaCost = parseInt(splitSave[15]);
 
-document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond;
+document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
 document.getElementById("pencilBuildingDisplay").innerHTML = pencilBuilding;
 document.getElementById("dogBuildingDisplay").innerHTML = dogBuilding;
 document.getElementById("computerBuildingDisplay").innerHTML = computerBuilding;
@@ -546,7 +554,9 @@ function viewStats()
 document.getElementById("interfaceElementHolder").innerHTML = statsSectionVar;
 }
 var updates = '<h2 id="updateheader">Updates:</h2>' + //Updates go here
-'<h4>Version 1.4</h4><ul>' +
+'<h4>Version 1.5</h4><ul>' +
+	"<li>Um....Stuff?</li>" +
+'</ul><h4>Version 1.4</h4><ul>' +
 	"<li>Introducing more buildings including the research institute and lava! What are they for? Don't ask.</li>" +
 	'<li>Minor bugfixes such as when buying more than 3 pencils creates many digits behind the decimal point.</li>'+
 	'<li>Inflation! Yes, inflation! Now building become more expensive the more you buy them! Muahahahaha...</li>' +
