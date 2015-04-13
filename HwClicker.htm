@@ -360,31 +360,28 @@ if (hwDone < lavaCost) {
 /*========================================================
 					WRITING SAVES
 ========================================================*/
-var saveNoEncrypt;
+var str;
+var encryptStr;
 function saveGame()
 {
-var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
-var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
-saveNoEncrypt = 
-parseInt(Math.floor(hwDone))+";"+ //add hw already done
-parseFloat(pagesPerSecond) +";"; //add current pps
-	for (buildingLoopIndex = 0; buildingLoopIndex < buildingAmountArray.length; buildingLoopIndex++) 
-	{
-	saveNoEncrypt += buildingAmountArray[buildingLoopIndex]+";"; //add all the building amounts
-	}
-	for (buildingCostLoopIndex = 0; buildingCostLoopIndex < buildingCostArray.length; buildingCostLoopIndex++) 
-	{
-	saveNoEncrypt += buildingCostArray[buildingCostLoopIndex]+";"; //add all the building cost amounts
-	}
-saveNoEncrypt = escape(saveNoEncrypt);    //convert symbols to weird stuff 
+createSave();
+encryptSave();
 window.localStorage.setItem("hwClickerSave",saveNoEncrypt); //aaand save
 }
 function exportSave()
 {
+var prompt;
+createSave();
+encryptSave();
+prompt = window.prompt("This is your exported save. Copy it and keep it somewhere safe!",str);
+prompt = null;
+}
+function createSave()
+{
 var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
 var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
-var prompt;
-var str = parseInt(Math.floor(hwDone))+";"+ //add hw already done
+str = "save455;"+
+		  parseInt(Math.floor(hwDone))+";"+ //add hw already done
 		  parseFloat(pagesPerSecond) +";"; //add current pps
 	for (buildingLoopIndex = 0; buildingLoopIndex < buildingAmountArray.length; buildingLoopIndex++) 
 	{
@@ -395,51 +392,108 @@ var str = parseInt(Math.floor(hwDone))+";"+ //add hw already done
 	str += buildingCostArray[buildingCostLoopIndex]+";"; //add all the building cost amounts
 	}
 str = escape(str);    //convert symbols to weird stuff
-prompt = window.prompt("This is your exported save. Copy it and keep it somewhere safe!",str);
-prompt = null;
+}
+function encryptSave()
+{
+encryptStr = str.split("");
+	for (i = 0; i < encryptStr.length; i++)
+	{
+	if (encryptStr[i]==1)
+		encryptStr[i]=6;
+	else if (encryptStr[i]==2)
+		encryptStr[i]=8;
+	else if (encryptStr[i]==3)
+		encryptStr[i]=1;
+	else if (encryptStr[i]==4)
+		encryptStr[i]=5;
+	else if (encryptStr[i]==5)
+		encryptStr[i]=7;
+	else if (encryptStr[i]==6)
+		encryptStr[i]=4;
+	else if (encryptStr[i]==7)
+		encryptStr[i]=2;
+	else if (encryptStr[i]==8)
+		encryptStr[i]=3;
+	else if (encryptStr[i]==9)
+		encryptStr[i]=0;
+	else if(encryptStr[i]==0)
+		encryptStr[i]=9;
+	else {}
+	}
+str = "";
+	for (i = 0; i < encryptStr.length; i++)
+	{
+	str += encryptStr[i];
+	}
 }
 /*========================================================
 					LOADING SAVES
 ========================================================*/
-var splitSave;
+var retrieveSave;
 function loadSave()
 {
-var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
-var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
-
-var retrieveSave = localStorage.getItem("hwClickerSave");  //getting the save
-retrieveSave = unescape(retrieveSave);   //converting weird stuff to symbols
-splitSave = retrieveSave.split(";")  //splitting it by ;
+retrieveSave = localStorage.getItem("hwClickerSave");  //getting the save
 processSave();
 }
 function importSave()
 {
-var str = window.prompt("Please paste the string you were given on export below.");
-if (str!=null)
-{
-str = unescape(str);
-splitSave = str.split(";");
+retrieveSave = window.prompt("Please paste the string you were given on export below.");
 processSave();
 }
 function processSave()
 {
-hwDone = parseInt(splitSave[0]);  //giving the first resulting amount to the hwDone
-pagesPerSecond = parseFloat(splitSave[1]);  //giving the second resulting amount to the pagesPerSecond
-pencilBuilding = parseInt(splitSave[2]);  //etc.
-dogBuilding = parseInt(splitSave[3]);
-computerBuilding = parseInt(splitSave[4]);
-libraryBuilding = parseInt(splitSave[5]);
-tutorBuilding = parseInt(splitSave[6]);
-instituteBuilding = parseInt(splitSave[7]);
-lavaBuilding = parseInt(splitSave[8]);
-pencilCost = parseInt(splitSave[9]);
-dogCost = parseInt(splitSave[10]);
-computerCost = parseInt(splitSave[11]);
-libraryCost = parseInt(splitSave[12]);
-tutorCost = parseInt(splitSave[13]);
-instituteCost = parseInt(splitSave[14]);
-lavaCost = parseInt(splitSave[15]);
+var deEncrypt = retrieveSave.split("");
+for (i = 0; i < deEncrypt.length; i++)
+ 	{
+	if (deEncrypt[i]==6)
+		deEncrypt[i]=1;
+	else if (deEncrypt[i]==8)
+		deEncrypt[i]=2;
+	else if (deEncrypt[i]==1)
+		deEncrypt[i]=3;
+	else if (deEncrypt[i]==5)
+		deEncrypt[i]=4;
+	else if (deEncrypt[i]==7)
+		deEncrypt[i]=5;
+	else if (deEncrypt[i]==4)
+		deEncrypt[i]=6;
+	else if (deEncrypt[i]==2)
+		deEncrypt[i]=7;
+	else if (deEncrypt[i]==3)
+		deEncrypt[i]=8;
+	else if (deEncrypt[i]==0)
+		deEncrypt[i]=9;
+	else if(deEncrypt[i]==9)
+		deEncrypt[i]=0;
+	else {}
+	}
+var splitSave = "";
+for (i = 0; i < deEncrypt.length; i++)
+ 	{
+	splitSave += deEncrypt[i];
+	}
+splitSave = unescape(splitSave);
+splitSave = splitSave.split(";");
+if (splitSave[0] == "save455")
+{
+hwDone = parseInt(splitSave[1]);  //giving the first resulting amount to the hwDone
+pagesPerSecond = parseFloat(splitSave[2]);  //giving the second resulting amount to the pagesPerSecond
+pencilBuilding = parseInt(splitSave[3]);  //etc.
+dogBuilding = parseInt(splitSave[4]);
+computerBuilding = parseInt(splitSave[5]);
+libraryBuilding = parseInt(splitSave[6]);
+tutorBuilding = parseInt(splitSave[7]);
+instituteBuilding = parseInt(splitSave[8]);
+lavaBuilding = parseInt(splitSave[9]);
+pencilCost = parseInt(splitSave[10]);
+dogCost = parseInt(splitSave[11]);
+computerCost = parseInt(splitSave[12]);
+libraryCost = parseInt(splitSave[13]);
+tutorCost = parseInt(splitSave[14]);
+instituteCost = parseInt(splitSave[15]);
+lavaCost = parseInt(splitSave[16]);
 update();
+}
 }
 /*========================================================
 					TOGGLE MIDDLE AREA
@@ -511,7 +565,7 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 <h1 id="hwDoneDisplay">Pages of Homework Done: 0</h1>
 <h4 id="ppsDisplay">Pages per second: 0</h4>
 <p>Click image to do homework</p>
-<img alt="Click to do homework" id="hwImage" bladebla="https://lh6.googleusercontent.com/-F5Cea2oeyBc/VRHeEEzujEI/AAAAAAAACMY/1s9gqe_nf7U/w419-h542-no/homework.jpg" width="250px" height="300px"  onclick="doHw()"/>
+<img alt="Click to do homework" id="hwImage" src="https://lh6.googleusercontent.com/-F5Cea2oeyBc/VRHeEEzujEI/AAAAAAAACMY/1s9gqe_nf7U/w419-h542-no/homework.jpg" width="250px" height="300px"  onclick="doHw()"/>
 </div>
 
 <div id="statsSection">
@@ -561,7 +615,7 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Pencil" id="buildingImage" bladebla="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no" width="50px" height="50px"  onclick="buyPencil()"/>
+			<img alt="Pencil" id="buildingImage" src="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no" width="50px" height="50px"  onclick="buyPencil()"/>
 		</td>
 		<td>
 			<p id="pencilCostDisplay">Cost: 25 Pages</p>
@@ -581,7 +635,7 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Dog" id="buildingImage" bladebla="https://lh6.googleusercontent.com/-p8XUdN0Ihb0/VNR5rrnjhXI/AAAAAAAAAA8/3URGjufliRQ/w1600-h1200/photo.jpg" width="50px" height="50px"  onclick="buyDog()"/>
+			<img alt="Dog" id="buildingImage" src="https://lh6.googleusercontent.com/-p8XUdN0Ihb0/VNR5rrnjhXI/AAAAAAAAAA8/3URGjufliRQ/w1600-h1200/photo.jpg" width="50px" height="50px"  onclick="buyDog()"/>
 		</td>
 		<td>
 			<p id="dogCostDisplay">Cost: 101 Pages</p>
@@ -600,7 +654,7 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Computer" id="buildingImage" bladebla="https://lh3.googleusercontent.com/-F0yEbufozXA/VQDns833VjI/AAAAAAAACJ0/qN5rqsu0of0/w227-h228-p/computer.jpg" width="50px" height="50px"  onclick="buyComputer()"/>
+			<img alt="Computer" id="buildingImage" src="https://lh3.googleusercontent.com/-F0yEbufozXA/VQDns833VjI/AAAAAAAACJ0/qN5rqsu0of0/w227-h228-p/computer.jpg" width="50px" height="50px"  onclick="buyComputer()"/>
 		</td>
 		<td>
 			<p id="computerCostDisplay">Cost: 442 Pages</p>
@@ -619,7 +673,7 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Library" id="buildingImage" bladebla="https://lh5.googleusercontent.com/-JXqt42yXO3U/VRCxzl5hRbI/AAAAAAAACLA/9-IFLtaOH_U/w269-h162-no/bookshelf.jpg" width="50px" height="50px"  onclick="buyLibrary()"/>
+			<img alt="Library" id="buildingImage" src="https://lh5.googleusercontent.com/-JXqt42yXO3U/VRCxzl5hRbI/AAAAAAAACLA/9-IFLtaOH_U/w269-h162-no/bookshelf.jpg" width="50px" height="50px"  onclick="buyLibrary()"/>
 		</td>
 		<td>
 			<p id="libraryCostDisplay">Cost: 1027 Pages</p>
@@ -638,7 +692,7 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Tutor" id="buildingImage" bladebla="https://tupalo.s3.amazonaws.com/s/tampa-florida/kumon-of-town-and-country-5143518-fe.jpg" width="50px" height="50px"  onclick="buyTutor()"/>
+			<img alt="Tutor" id="buildingImage" src="https://tupalo.s3.amazonaws.com/s/tampa-florida/kumon-of-town-and-country-5143518-fe.jpg" width="50px" height="50px"  onclick="buyTutor()"/>
 		</td>
 		<td>
 			<p id="tutorCostDisplay">Cost: 5678 Pages</p>
@@ -657,7 +711,7 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Research Institute" id="buildingImage" bladebla="http://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-580x288/public/news/research/news/121106heart-and-lung-research-institute.jpg?itok=3DfCO5Kl" width="50px" height="50px"  onclick="buyInstitute()"/>
+			<img alt="Research Institute" id="buildingImage" src="http://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-580x288/public/news/research/news/121106heart-and-lung-research-institute.jpg?itok=3DfCO5Kl" width="50px" height="50px"  onclick="buyInstitute()"/>
 		</td>
 		<td>
 			<p id="instituteCostDisplay">Cost: 30000 Pages</p>
@@ -676,7 +730,7 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Lava" id="buildingImage" bladebla="http://hydra-media.cursecdn.com/minecraft.gamepedia.com/2/27/Lava.png?version=5a751570cb4de22cba7628f8fe2a3a66" width="50px" height="50px"  onclick="buyLava()"/>
+			<img alt="Lava" id="buildingImage" src="http://hydra-media.cursecdn.com/minecraft.gamepedia.com/2/27/Lava.png?version=5a751570cb4de22cba7628f8fe2a3a66" width="50px" height="50px"  onclick="buyLava()"/>
 		</td>
 		<td>
 			<p id="lavaCostDisplay">Cost: 169690 Pages</p>
