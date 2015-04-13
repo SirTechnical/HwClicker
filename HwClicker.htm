@@ -121,6 +121,10 @@ q {
 	Mostly.
 	Pleaaaase do not steal code from here without permission. (anyway, who would want to steal this code?)*/
 
+
+
+
+
 /*========================================================
 					MAIN SCRIPTS
 ========================================================*/
@@ -128,30 +132,10 @@ q {
 //Increment Homework Done when image is clicked on
 var hwDone=0; 
 var pagesPerSecond=0;
-var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
-var buildingCostArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
-
 function doHw()
 {
 hwDone++;
 document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);
-}
-
-function shortenNumber()
-{
-var suffix;
-if (hwDone < 1000000) {
-} else if (hwDone < 1000000000) {
-    hwDone = Math.floor(hwDone / 1000) / 1000;
-    suffix = ' Million';
-} else if (hwDone < 1000000000000) {
-    hwDone = Math.floor(hwDone / 1000000) / 1000;
-    suffix = ' Billion';
-} else if (hwDone < 1000000000000000) {
-    hwDone = Math.floor(hwDone / 1000000000) / 1000;
-    suffix = ' Trillion';
-} else { }
-
 }
 
 //Increment Homework Done at a bit less than 30 fps, add it to the hwDoneDisplay
@@ -165,8 +149,6 @@ setInterval(function (){hwDone = libraryBuilding + hwDone}, 83.33333);          
 setInterval(function (){hwDone = tutorBuilding * 3 + hwDone}, 43.47826);
 setInterval(function (){hwDone = instituteBuilding * 20 + hwDone}, 54.79452);
 setInterval(function (){hwDone = lavaBuilding * 100 + hwDone}, 49.62779);
-setInterval(shortenNumber(), 40);
-setInterval(saveGame(), 60000);
 loadSave(); //Load in the latest save, details in the "load save" script
 viewMenu(); //Change the middle section to the menu
 }
@@ -192,6 +174,7 @@ if (r === "Yes")
 	tutorCost = 5678;
 	instituteCost = 30000;
 	lavaCost = 169690;
+
 	update()
 	}
 else
@@ -431,7 +414,9 @@ processSave();
 }
 function importSave()
 {
-var str = window.prompt("Please paste the string you were given on export below.","(String)")
+var str = window.prompt("Please paste the string you were given on export below.","")
+if (str!=null)
+{
 str = unescape(str);
 splitSave = str.split(";");
 processSave();
