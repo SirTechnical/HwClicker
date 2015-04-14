@@ -149,6 +149,8 @@ setInterval(function (){hwDone = libraryBuilding + hwDone}, 83.33333);          
 setInterval(function (){hwDone = tutorBuilding * 3 + hwDone}, 43.47826);
 setInterval(function (){hwDone = instituteBuilding * 20 + hwDone}, 54.79452);
 setInterval(function (){hwDone = lavaBuilding * 100 + hwDone}, 49.62779);
+setInterval(function (){update()}, 40);
+setInterval(function (){autoSaveGame()}, 60000);
 loadSave(); //Load in the latest save, details in the "load save" script
 viewMenu(); //Change the middle section to the menu
 }
@@ -202,9 +204,9 @@ document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost + " P
 /*========================================================
 					BUILDING SCRIPTS
 ========================================================*/
-var buildings;
+var buildings = {pencilBuilding: 0,dogBuilding: 0,computerBuilding:0 ,libraryBuilding:0 ,tutorBuilding:0 ,instituteBuilding:0 ,lavaBuilding:0 };
 //Pencil script
-var pencilBuilding=0;
+var pencilBuilding = 0;
 var pencilCost=25;
 function buyPencil()
 {
@@ -362,6 +364,12 @@ if (hwDone < lavaCost) {
 ========================================================*/
 var str;
 var encryptStr;
+function autoSaveGame()
+{
+document.getElementById("messages").innerHTML = "Game Saved!";
+setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+saveGame();
+}
 function saveGame()
 {
 createSave();
