@@ -121,7 +121,7 @@ q {
 	Mostly.
 	Pleaaaase do not steal code from here without permission. (anyway, who would want to steal this code?)*/
 
-
+console.log("If you're reading this go eat a d.");
 
 
 
@@ -132,85 +132,84 @@ q {
 //Increment Homework Done when image is clicked on
 var hwDone=0; 
 var pagesPerSecond=0;
-function doHw()
-{
-hwDone++;
-document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);
+function doHw() {
+	hwDone++;
+	document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);
 }
 
 //Increment Homework Done at a bit less than 30 fps, add it to the hwDoneDisplay
-function startIncrementer()
-{
-setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);}, 40); //Updates every 40 milliseconds
-setInterval(function (){hwDone = pencilBuilding * 0.01 + hwDone;}, 50);
-setInterval(function (){hwDone = dogBuilding * 0.05 + hwDone}, 50);
-setInterval(function (){hwDone = computerBuilding * 0.25 + hwDone}, 50);
-setInterval(function (){hwDone = libraryBuilding + hwDone}, 83.33333);            //good enough fps for you?
-setInterval(function (){hwDone = tutorBuilding * 3 + hwDone}, 43.47826);
-setInterval(function (){hwDone = instituteBuilding * 20 + hwDone}, 54.79452);
-setInterval(function (){hwDone = lavaBuilding * 100 + hwDone}, 49.62779);
-setInterval(function (){update()}, 40);
-setInterval(function (){autoSaveGame()}, 60000);
-loadSave(); //Load in the latest save, details in the "load save" script
-viewMenu(); //Change the middle section to the menu
+function startIncrementer() {
+	setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);}, 40); //Updates every 40 milliseconds
+	setInterval(function (){hwDone = pencilBuilding * 0.01 + hwDone;}, 50);
+	setInterval(function (){hwDone = dogBuilding * 0.05 + hwDone}, 50);
+	setInterval(function (){hwDone = computerBuilding * 0.25 + hwDone}, 50);
+	setInterval(function (){hwDone = libraryBuilding + hwDone}, 83.33333);            //good enough fps for you?
+	setInterval(function (){hwDone = tutorBuilding * 3 + hwDone}, 43.47826);
+	setInterval(function (){hwDone = instituteBuilding * 20 + hwDone}, 54.79452);
+	setInterval(function (){hwDone = lavaBuilding * 100 + hwDone}, 49.62779);
+	setInterval(function (){update()}, 40);
+	setInterval(function (){autoSaveGame()}, 60000);
+	setInterval(function (){changeNews()}, 10000);
+	loadSave(); //Load in the latest save, details in the "load save" script
+	viewMenu(); //Change the middle section to the menu
 }
 
-function reset()
-{
-var r = window.prompt("Do you really want to reset? Type in 'Yes' to confirm.");
-if (r === "Yes")
-	{
-	hwDone = 0;
-	pagesPerSecond = 0;
-	pencilBuilding = 0;
-	dogBuilding = 0;
-	computerBuilding = 0;
-	libraryBuilding = 0;
-	tutorBuilding = 0;
-	instituteBuilding = 0;
-	lavaBuilding = 0;
-	pencilCost = 25;
-	dogCost = 101;
-	computerCost = 442;
-	libraryCost = 1027;
-	tutorCost = 5678;
-	instituteCost = 30000;
-	lavaCost = 169690;
-
-	update()
-	}
-else
- { }
+function reset() {
+	var r = window.prompt("Do you really want to reset? Type in 'Yes' to confirm.");
+	if (r === "Yes")
+		{	
+		hwDone = 0;
+		pagesPerSecond = 0;
+		pencilBuilding = 0;
+		dogBuilding = 0;
+		computerBuilding = 0;
+		libraryBuilding = 0;
+		tutorBuilding = 0;
+		instituteBuilding = 0;
+		lavaBuilding = 0;
+		pencilCost = 25;
+		dogCost = 101;
+		computerCost = 442;
+		libraryCost = 1027;
+		tutorCost = 5678;
+		instituteCost = 30000;
+		lavaCost = 169690;
+		update()
+		}
+	else
+	{ }
 }
-function update()
-{
-document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
-document.getElementById("pencilBuildingDisplay").innerHTML = pencilBuilding;
-document.getElementById("dogBuildingDisplay").innerHTML = dogBuilding;
-document.getElementById("computerBuildingDisplay").innerHTML = computerBuilding;
-document.getElementById("libraryBuildingDisplay").innerHTML = libraryBuilding;
-document.getElementById("tutorBuildingDisplay").innerHTML = tutorBuilding;
-document.getElementById("instituteBuildingDisplay").innerHTML = instituteBuilding;
-document.getElementById("lavaBuildingDisplay").innerHTML = lavaBuilding;
+function update() {
+	document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
+	document.getElementById("pencilBuildingDisplay").innerHTML = pencilBuilding;
+	document.getElementById("dogBuildingDisplay").innerHTML = dogBuilding;
+	document.getElementById("computerBuildingDisplay").innerHTML = computerBuilding;
+	document.getElementById("libraryBuildingDisplay").innerHTML = libraryBuilding;
+	document.getElementById("tutorBuildingDisplay").innerHTML = tutorBuilding;
+	document.getElementById("instituteBuildingDisplay").innerHTML = instituteBuilding;
+	document.getElementById("lavaBuildingDisplay").innerHTML = lavaBuilding;
 
-document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + pencilCost + " Pages";
-document.getElementById("dogCostDisplay").innerHTML = "Cost: " + dogCost + " Pages";
-document.getElementById("computerCostDisplay").innerHTML = "Cost: " + computerCost + " Pages";
-document.getElementById("libraryCostDisplay").innerHTML = "Cost: " + libraryCost + " Pages";
-document.getElementById("tutorCostDisplay").innerHTML = "Cost: " + tutorCost + " Pages";
-document.getElementById("instituteCostDisplay").innerHTML = "Cost: " + instituteCost + " Pages";
-document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost + " Pages";
+	document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + pencilCost + " Pages";
+	document.getElementById("dogCostDisplay").innerHTML = "Cost: " + dogCost + " Pages";
+	document.getElementById("computerCostDisplay").innerHTML = "Cost: " + computerCost + " Pages";
+	document.getElementById("libraryCostDisplay").innerHTML = "Cost: " + libraryCost + " Pages";
+	document.getElementById("tutorCostDisplay").innerHTML = "Cost: " + tutorCost + " Pages";
+	document.getElementById("instituteCostDisplay").innerHTML = "Cost: " + instituteCost + " Pages";
+	document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost + " Pages";
 }
+function popup(string)  // FINISH THIS MAKE A CONSTRUCTOR FOR POPUPS
 /*========================================================
 					BUILDING SCRIPTS
 ========================================================*/
 var buildings = {pencilBuilding: 0,dogBuilding: 0,computerBuilding:0 ,libraryBuilding:0 ,tutorBuilding:0 ,instituteBuilding:0 ,lavaBuilding:0 };
 //Pencil script
-var pencilBuilding = 0;
+
+buildings.pencilBuilding {cost: 25, multiplier: 1}; //Objects. Need I say more?
+console.log(buildings.pencilbuilding);
+var pencilBuilding=0;
 var pencilCost=25;
-function buyPencil()
-{
-if (hwDone < pencilCost) {
+function buyPencil() {
+	if (hwDone < pencilCost) {
         document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
 		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
     } else {
@@ -230,9 +229,8 @@ if (hwDone < pencilCost) {
 //Dog script
 var dogBuilding=0;
 var dogCost=101;
-function buyDog()
-{
-if (hwDone < dogCost) {
+function buyDog() {
+	if (hwDone < dogCost) {
         document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
 		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
     } else {
@@ -252,9 +250,8 @@ if (hwDone < dogCost) {
 //Computer script
 var computerBuilding=0;
 var computerCost=442;
-function buyComputer()
-{
-if (hwDone < computerCost) {
+function buyComputer() {
+	if (hwDone < computerCost) {
         document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
 		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
     } else {
@@ -274,9 +271,8 @@ if (hwDone < computerCost) {
 //Library script
 var libraryBuilding=0;
 var libraryCost=1027;
-function buyLibrary()
-{
-if (hwDone < libraryCost) {
+function buyLibrary() {
+	if (hwDone < libraryCost) {
         document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
 		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
     } else {
@@ -296,9 +292,8 @@ if (hwDone < libraryCost) {
 //Tutor script
 var tutorBuilding=0;
 var tutorCost=5678;
-function buyTutor()
-{
-if (hwDone < tutorCost) {
+function buyTutor() {
+	if (hwDone < tutorCost) {
         document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
 		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
     } else {
@@ -318,9 +313,8 @@ if (hwDone < tutorCost) {
 //Research Institute script
 var instituteBuilding=0;
 var instituteCost=30000;
-function buyInstitute()
-{
-if (hwDone < instituteCost) {
+function buyInstitute() {
+	if (hwDone < instituteCost) {
         document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
 		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
     } else {
@@ -340,9 +334,8 @@ if (hwDone < instituteCost) {
 //Lava script
 var lavaBuilding=0;
 var lavaCost=169690;
-function buyLava()
-{
-if (hwDone < lavaCost) {
+function buyLava() {
+	if (hwDone < lavaCost) {
         document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
 		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
     } else {
@@ -364,144 +357,131 @@ if (hwDone < lavaCost) {
 ========================================================*/
 var str;
 var encryptStr;
-function autoSaveGame()
-{
-document.getElementById("messages").innerHTML = "Game Saved!";
-setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-saveGame();
+function autoSaveGame() {
+	document.getElementById("messages").innerHTML = "Game Saved!";
+	setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
+	saveGame();
 }
-function saveGame()
-{
-createSave();
-encryptSave();
-window.localStorage.setItem("hwClickerSave",str); //aaand save
+function saveGame() {
+	createSave();
+	encryptSave();
+	window.localStorage.setItem("hwClickerSave",str); //aaand save
 }
-function exportSave()
-{
-var prompt;
-createSave();
-encryptSave();
-prompt = window.prompt("This is your exported save. Copy it and keep it somewhere safe!",str);
-prompt = null;
+function exportSave() {
+	prompt;
+	createSave();
+	encryptSave();
+	prompt = window.prompt("This is your exported save. Copy it and keep it somewhere safe!",str);
+	prompt = null;
 }
-function createSave()
-{
-var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
-var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
-str = "save455;"+
+function createSave() {
+	var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
+	var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
+	str = "save455;"+
 		  parseInt(Math.floor(hwDone))+";"+ //add hw already done
 		  parseFloat(pagesPerSecond) +";"; //add current pps
-	for (buildingLoopIndex = 0; buildingLoopIndex < buildingAmountArray.length; buildingLoopIndex++) 
-	{
-	str += buildingAmountArray[buildingLoopIndex]+";"; //add all the building amounts
+	for (buildingLoopIndex = 0; buildingLoopIndex < buildingAmountArray.length; buildingLoopIndex++) {
+		str += buildingAmountArray[buildingLoopIndex]+";"; //add all the building amounts
 	}
-	for (buildingCostLoopIndex = 0; buildingCostLoopIndex < buildingCostArray.length; buildingCostLoopIndex++) 
-	{
-	str += buildingCostArray[buildingCostLoopIndex]+";"; //add all the building cost amounts
+	for (buildingCostLoopIndex = 0; buildingCostLoopIndex < buildingCostArray.length; buildingCostLoopIndex++) {
+		str += buildingCostArray[buildingCostLoopIndex]+";"; //add all the building cost amounts
 	}
-str = escape(str);    //convert symbols to weird stuff
+	str = escape(str);    //convert symbols to weird stuff
 }
-function encryptSave()
-{
-encryptStr = str.split("");
-	for (i = 0; i < encryptStr.length; i++)
-	{
-	if (encryptStr[i]==1)
-		encryptStr[i]=6;
-	else if (encryptStr[i]==2)
-		encryptStr[i]=8;
-	else if (encryptStr[i]==3)
-		encryptStr[i]=1;
-	else if (encryptStr[i]==4)
-		encryptStr[i]=5;
-	else if (encryptStr[i]==5)
-		encryptStr[i]=7;
-	else if (encryptStr[i]==6)
-		encryptStr[i]=4;
-	else if (encryptStr[i]==7)
-		encryptStr[i]=2;
-	else if (encryptStr[i]==8)
-		encryptStr[i]=3;
-	else if (encryptStr[i]==9)
-		encryptStr[i]=0;
-	else if(encryptStr[i]==0)
-		encryptStr[i]=9;
-	else {}
-	}
-str = "";
-	for (i = 0; i < encryptStr.length; i++)
-	{
-	str += encryptStr[i];
+function encryptSave() {
+	encryptStr = str.split("");
+		for (i = 0; i < encryptStr.length; i++)
+		{
+		if (encryptStr[i]==1)
+			encryptStr[i]=6;
+		else if (encryptStr[i]==2)
+			encryptStr[i]=8;
+		else if (encryptStr[i]==3)
+			encryptStr[i]=1;
+		else if (encryptStr[i]==4)
+			encryptStr[i]=5;
+		else if (encryptStr[i]==5)
+			encryptStr[i]=7;
+		else if (encryptStr[i]==6)
+			encryptStr[i]=4;
+		else if (encryptStr[i]==7)
+			encryptStr[i]=2;
+		else if (encryptStr[i]==8)
+			encryptStr[i]=3;
+		else if (encryptStr[i]==9)
+			encryptStr[i]=0;
+		else if(encryptStr[i]==0)
+			encryptStr[i]=9;
+		else {}
+		}
+	str = "";
+	for (i = 0; i < encryptStr.length; i++) {
+		str += encryptStr[i];
 	}
 }
 /*========================================================
 					LOADING SAVES
 ========================================================*/
 var retrieveSave;
-function loadSave()
-{
-retrieveSave = localStorage.getItem("hwClickerSave");  //getting the save
-processSave();
+function loadSave() {
+	retrieveSave = localStorage.getItem("hwClickerSave");  //getting the save
+	processSave();
 }
-function importSave()
-{
-retrieveSave = window.prompt("Please paste the string you were given on export below.");
-processSave();
+function importSave() {
+	retrieveSave = window.prompt("Please paste the string you were given on export below.");
+	processSave();
 }
-function processSave()
-{
-var deEncrypt = retrieveSave.split("");
-for (i = 0; i < deEncrypt.length; i++)
- 	{
-	if (deEncrypt[i]==6)
-		deEncrypt[i]=1;
-	else if (deEncrypt[i]==8)
-		deEncrypt[i]=2;
-	else if (deEncrypt[i]==1)
-		deEncrypt[i]=3;
-	else if (deEncrypt[i]==5)
-		deEncrypt[i]=4;
-	else if (deEncrypt[i]==7)
-		deEncrypt[i]=5;
-	else if (deEncrypt[i]==4)
-		deEncrypt[i]=6;
-	else if (deEncrypt[i]==2)
-		deEncrypt[i]=7;
-	else if (deEncrypt[i]==3)
-		deEncrypt[i]=8;
-	else if (deEncrypt[i]==0)
-		deEncrypt[i]=9;
-	else if(deEncrypt[i]==9)
-		deEncrypt[i]=0;
-	else {}
+function processSave() {
+	var deEncrypt = retrieveSave.split("");
+	for (i = 0; i < deEncrypt.length; i++) {
+		if (deEncrypt[i]==6)
+			deEncrypt[i]=1;
+		else if (deEncrypt[i]==8)
+			deEncrypt[i]=2;
+		else if (deEncrypt[i]==1)
+			deEncrypt[i]=3;
+		else if (deEncrypt[i]==5)
+			deEncrypt[i]=4;
+		else if (deEncrypt[i]==7)
+			deEncrypt[i]=5;
+		else if (deEncrypt[i]==4)
+			deEncrypt[i]=6;
+		else if (deEncrypt[i]==2)
+			deEncrypt[i]=7;
+		else if (deEncrypt[i]==3)
+			deEncrypt[i]=8;
+		else if (deEncrypt[i]==0)
+			deEncrypt[i]=9;
+		else if(deEncrypt[i]==9)
+			deEncrypt[i]=0;
+		else {}
 	}
-var splitSave = "";
-for (i = 0; i < deEncrypt.length; i++)
- 	{
-	splitSave += deEncrypt[i];
+	var splitSave = "";
+	for (i = 0; i < deEncrypt.length; i++) {
+		splitSave += deEncrypt[i];
 	}
-splitSave = unescape(splitSave);
-splitSave = splitSave.split(";");
-if (splitSave[0] == "save455")
-{
-hwDone = parseInt(splitSave[1]);  //giving the first resulting amount to the hwDone
-pagesPerSecond = parseFloat(splitSave[2]);  //giving the second resulting amount to the pagesPerSecond
-pencilBuilding = parseInt(splitSave[3]);  //etc.
-dogBuilding = parseInt(splitSave[4]);
-computerBuilding = parseInt(splitSave[5]);
-libraryBuilding = parseInt(splitSave[6]);
-tutorBuilding = parseInt(splitSave[7]);
-instituteBuilding = parseInt(splitSave[8]);
-lavaBuilding = parseInt(splitSave[9]);
-pencilCost = parseInt(splitSave[10]);
-dogCost = parseInt(splitSave[11]);
-computerCost = parseInt(splitSave[12]);
-libraryCost = parseInt(splitSave[13]);
-tutorCost = parseInt(splitSave[14]);
-instituteCost = parseInt(splitSave[15]);
-lavaCost = parseInt(splitSave[16]);
-update();
-}
+	splitSave = unescape(splitSave);
+	splitSave = splitSave.split(";");
+	
+	if (splitSave[0] == "save455") {
+	hwDone = parseInt(splitSave[1]);  //giving the first resulting amount to the hwDone
+	pagesPerSecond = parseFloat(splitSave[2]);  //giving the second resulting amount to the pagesPerSecond
+	pencilBuilding = parseInt(splitSave[3]);  //etc.
+	dogBuilding = parseInt(splitSave[4]);
+	computerBuilding = parseInt(splitSave[5]);
+	libraryBuilding = parseInt(splitSave[6]);
+	tutorBuilding = parseInt(splitSave[7]);
+	instituteBuilding = parseInt(splitSave[8]);
+	lavaBuilding = parseInt(splitSave[9]);
+	pencilCost = parseInt(splitSave[10]);
+	dogCost = parseInt(splitSave[11]);
+	computerCost = parseInt(splitSave[12]);
+	libraryCost = parseInt(splitSave[13]);
+	tutorCost = parseInt(splitSave[14]);
+	instituteCost = parseInt(splitSave[15]);
+	lavaCost = parseInt(splitSave[16]);
+	update();
+	}
 }
 /*========================================================
 					TOGGLE MIDDLE AREA
@@ -511,14 +491,12 @@ var menuSection = '<h2 id="updateheader">Menu</h2>'+
 '<button onclick="reset()">Reset Game</button>'+ //hrm updateheader...
 '<button onclick="exportSave()">Export Save</button>'+
 '<button onclick="importSave()">Import Save</button>';
-function viewMenu()
-{
-document.getElementById("interfaceElementHolder").innerHTML = menuSection;
+function viewMenu() {
+	document.getElementById("interfaceElementHolder").innerHTML = menuSection;
 }
 var statsSectionVar = '<h2 id="updateheader">Stats</h2>';
-function viewStats()
-{
-document.getElementById("interfaceElementHolder").innerHTML = statsSectionVar;
+function viewStats() {
+	document.getElementById("interfaceElementHolder").innerHTML = statsSectionVar;
 }
 var updates = '<h2 id="updateheader">Updates:</h2>' + //Updates go here
 '<h4>Version 1.5</h4><ul>' +
@@ -538,9 +516,8 @@ var updates = '<h2 id="updateheader">Updates:</h2>' + //Updates go here
 '</ul><h4>Version 1.1:</h4><ul>' +
 	"<li>Clicking button increases the amount of homework you've done!</li>" +
 '</ul>';
-function viewUpdates()
-{
-document.getElementById("interfaceElementHolder").innerHTML = updates;
+function viewUpdates() {
+	document.getElementById("interfaceElementHolder").innerHTML = updates;
 }
 var creditsSection = '<h2 id="updateheader">Credits:</h2>'+
 '<p>-Upgrade/Achievement/Description Maker: Edwin Z.</p>' +
@@ -548,9 +525,14 @@ var creditsSection = '<h2 id="updateheader">Credits:</h2>'+
 '<p>-Artist: Tian Z.</p>' +
 '<p>-Super Necessary Important Vital Rock to the Game: Michael S.</p>' +
 '<p>-Script Writer: Kevin G.</p>'
-function viewCredits()
-{
-document.getElementById("interfaceElementHolder").innerHTML = creditsSection;
+function viewCredits() {
+	document.getElementById("interfaceElementHolder").innerHTML = creditsSection;
+}
+/*========================================================
+				NEWS TICKER
+========================================================*/
+function changeNews() {
+
 }
 </script>
 
