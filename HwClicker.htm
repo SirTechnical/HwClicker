@@ -123,30 +123,19 @@ q {
 
 console.log("If you're reading this go eat a d.");
 
-
-
 /*========================================================
 					MAIN SCRIPTS
 ========================================================*/
-
+var Game = {hwDone:0,pagesPerSecond:0,hwEarned:0};
 //Increment Homework Done when image is clicked on
-var hwDone=0; 
-var pagesPerSecond=0;
 function doHw() {
-	hwDone++;
-	document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);
+	Game.hwDone++;
+	Game.hwEarned++;
+	document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(Game.hwDone);
 }
 
 //Increment Homework Done at a bit less than 30 fps, add it to the hwDoneDisplay
 function startIncrementer() {
-	setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(hwDone);}, 40); //Updates every 40 milliseconds
-	setInterval(function (){hwDone = pencilBuilding * 0.01 + hwDone;}, 50);
-	setInterval(function (){hwDone = dogBuilding * 0.05 + hwDone}, 50);
-	setInterval(function (){hwDone = computerBuilding * 0.25 + hwDone}, 50);
-	setInterval(function (){hwDone = libraryBuilding + hwDone}, 83.33333);            //good enough fps for you?
-	setInterval(function (){hwDone = tutorBuilding * 3 + hwDone}, 43.47826);
-	setInterval(function (){hwDone = instituteBuilding * 20 + hwDone}, 54.79452);
-	setInterval(function (){hwDone = lavaBuilding * 100 + hwDone}, 49.62779);
 	setInterval(function (){update()}, 40);
 	setInterval(function (){autoSaveGame()}, 60000);
 	setInterval(function (){changeNews()}, 10000);
@@ -154,9 +143,10 @@ function startIncrementer() {
 	viewMenu(); //Change the middle section to the menu
 }
 
-function reset() {
+//RESETTING
+function reset() {  
 	var r = window.prompt("Do you really want to reset? Type in 'Yes' to confirm.");
-	if (r === "Yes")
+	if (r.toLowerCase() === "yes")
 		{	
 		hwDone = 0;
 		pagesPerSecond = 0;
@@ -179,179 +169,51 @@ function reset() {
 	else
 	{ }
 }
-function update() {
-	document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
-	document.getElementById("pencilBuildingDisplay").innerHTML = pencilBuilding;
-	document.getElementById("dogBuildingDisplay").innerHTML = dogBuilding;
-	document.getElementById("computerBuildingDisplay").innerHTML = computerBuilding;
-	document.getElementById("libraryBuildingDisplay").innerHTML = libraryBuilding;
-	document.getElementById("tutorBuildingDisplay").innerHTML = tutorBuilding;
-	document.getElementById("instituteBuildingDisplay").innerHTML = instituteBuilding;
-	document.getElementById("lavaBuildingDisplay").innerHTML = lavaBuilding;
-
-	document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + pencilCost + " Pages";
-	document.getElementById("dogCostDisplay").innerHTML = "Cost: " + dogCost + " Pages";
-	document.getElementById("computerCostDisplay").innerHTML = "Cost: " + computerCost + " Pages";
-	document.getElementById("libraryCostDisplay").innerHTML = "Cost: " + libraryCost + " Pages";
-	document.getElementById("tutorCostDisplay").innerHTML = "Cost: " + tutorCost + " Pages";
-	document.getElementById("instituteCostDisplay").innerHTML = "Cost: " + instituteCost + " Pages";
-	document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost + " Pages";
+function choose(arr) {
+	return arr[Math.floor(Math.random()*arr.length)];
+}	
+function notice(string) { // FINISH THIS MAKE A CONSTRUCTOR FOR POPUPS
+	
 }
-function popup(string)  // FINISH THIS MAKE A CONSTRUCTOR FOR POPUPS
+/*========================================================
+					UPDATERS
+========================================================*/
+function update() {
+	for (i in buildings) {
+		Game.pagesPerSecond += buildings[i].basePps * buildings[i].multiplier; //Calculating pages per second
+		buildings[i].cost *= Math.pow(1.15, buildings[i]) //Calculating building costs
+		document.getElementById(i + "Display").innerHTML = buildings[i];
+		document.getElementById(buildings[i].buildingType + "CostDisplay").innerHTML = "Cost: " + buildings[i].cost + " Pages";
+	}
+	setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(Game.hwDone);}, 50);
+	setInterval(function (){Game.hwDone += Game.pagesPerSecond/20; Game.hwEarned += Game.pagesPerSecond/20;}, 50);
+	document.getElementById("ppsDisplay").innerHTML = Game.pagesPerSecond;
+}
 /*========================================================
 					BUILDING SCRIPTS
 ========================================================*/
-var buildings = {pencilBuilding: 0,dogBuilding: 0,computerBuilding:0 ,libraryBuilding:0 ,tutorBuilding:0 ,instituteBuilding:0 ,lavaBuilding:0 };
-//Pencil script
+var buildings = {pencilBuilding:0,dogBuilding:0,computerBuilding:0,libraryBuilding:0,tutorBuilding:0,instituteBuilding:0,lavaBuilding:0};
+buildings.pencilBuilding = {buildingType:pencil,baseCost:25,cost:25,basePps:0.2,multiplier:1};
+buildings.dogBuilding = {buildingType:dog,baseCost:101,cost:101,basePps:1,multiplier:1};
+buildings.computerBuilding = {buildingType:computer,baseCost:442,cost:442,basePps:5,multiplier:1};
+buildings.libraryBuilding = {buildingType:library,baseCost:1027,cost:1027,basePps:12,multiplier:1};
+buildings.tutorBuilding = {buildingType:tutor,baseCost:5678,cost:5678,basePps:69,multiplier:1};
+buildings.instituteBuilding = {buildingType:institute,baseCost:30000,cost:30000,basePps:365,multiplier:1};
+buildings.lavaBuilding = {buildingType:lava,baseCost:169690,ost:169690,basePps:2015,multiplier:1};
 
-buildings.pencilBuilding {cost: 25, multiplier: 1}; //Objects. Need I say more?
-console.log(buildings.pencilbuilding);
-var pencilBuilding=0;
-var pencilCost=25;
-function buyPencil() {
-	if (hwDone < pencilCost) {
-        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-    } else {
-        document.getElementById("messages").innerHTML = "You bought a pencil!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-		pencilBuilding++;
-		hwDone = hwDone - pencilCost;
-		pagesPerSecond = 0.2 + pagesPerSecond;
-		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
-		document.getElementById("pencilBuildingDisplay").innerHTML = pencilBuilding;
-		pencilCost = 25 * Math.pow(1.15, pencilBuilding)
-		pencilCost = pencilCost.toFixed();
-		document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + pencilCost + " Pages";
-    }
+function buyBuilding(bdType) {
+	var buildingType = bdType + "Building";
+	var buildingCost = buildings[buildingType].cost;
+	if (hwDone < buildingCost) {
+		notice('You do not have enough credit to buy this item!');
+	} else {
+		notice('You bought a ' + bdType + '!');
+		buildings[buildingType]++;
+		hwDone -= buildingCost;
+		pagesPerSecond += buildings[buildingType].basePps;
+	}
+		
 }
-
-//Dog script
-var dogBuilding=0;
-var dogCost=101;
-function buyDog() {
-	if (hwDone < dogCost) {
-        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-    } else {
-        document.getElementById("messages").innerHTML = "You bought a dog!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-		dogBuilding++;
-		hwDone = hwDone - dogCost;
-		pagesPerSecond = pagesPerSecond + 1;
-		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
-		document.getElementById("dogBuildingDisplay").innerHTML = dogBuilding;
-		dogCost = 101 * Math.pow(1.15, dogBuilding)
-		dogCost = dogCost.toFixed();
-		document.getElementById("dogCostDisplay").innerHTML = "Cost: " + dogCost + " Pages";
-    }
-}
-
-//Computer script
-var computerBuilding=0;
-var computerCost=442;
-function buyComputer() {
-	if (hwDone < computerCost) {
-        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-    } else {
-        document.getElementById("messages").innerHTML = "You bought a computer!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-		computerBuilding++;
-		hwDone = hwDone - computerCost;
-		pagesPerSecond = pagesPerSecond + 5;
-		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
-		document.getElementById("computerBuildingDisplay").innerHTML = computerBuilding;
-		computerCost = 442 * Math.pow(1.15, computerBuilding)
-		computerCost = computerCost.toFixed();
-		document.getElementById("computerCostDisplay").innerHTML = "Cost: " + computerCost + " Pages";
-    }
-}
-
-//Library script
-var libraryBuilding=0;
-var libraryCost=1027;
-function buyLibrary() {
-	if (hwDone < libraryCost) {
-        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-    } else {
-        document.getElementById("messages").innerHTML = "You bought an entire library!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-		libraryBuilding++;
-		hwDone = hwDone - libraryCost;
-		pagesPerSecond = pagesPerSecond + 12;
-		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
-		document.getElementById("libraryBuildingDisplay").innerHTML = libraryBuilding;
-		libraryCost = 1027 * Math.pow(1.15, libraryBuilding)
-		libraryCost = libraryCost.toFixed();
-		document.getElementById("libraryCostDisplay").innerHTML = "Cost: " + libraryCost + " Pages";
-    }
-}
-
-//Tutor script
-var tutorBuilding=0;
-var tutorCost=5678;
-function buyTutor() {
-	if (hwDone < tutorCost) {
-        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-    } else {
-        document.getElementById("messages").innerHTML = "You hired a tutor!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-		tutorBuilding++;
-		hwDone = hwDone - tutorCost;
-		pagesPerSecond = pagesPerSecond + 69;
-		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
-		document.getElementById("tutorBuildingDisplay").innerHTML = tutorBuilding;
-		tutorCost = 5678 * Math.pow(1.15, tutorBuilding)
-		tutorCost = tutorCost.toFixed();
-		document.getElementById("tutorCostDisplay").innerHTML = "Cost: " + tutorCost + " Pages";
-    }
-}
-
-//Research Institute script
-var instituteBuilding=0;
-var instituteCost=30000;
-function buyInstitute() {
-	if (hwDone < instituteCost) {
-        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-    } else {
-        document.getElementById("messages").innerHTML = "You bought your own research institute!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-		instituteBuilding++;
-		hwDone = hwDone - instituteCost;
-		pagesPerSecond = pagesPerSecond + 365;
-		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
-		document.getElementById("instituteBuildingDisplay").innerHTML = instituteBuilding;
-		instituteCost = 30000 * Math.pow(1.15, instituteBuilding)
-		instituteCost = instituteCost.toFixed();
-		document.getElementById("instituteCostDisplay").innerHTML = "Cost: " + instituteCost + " Pages";
-    }
-}
-
-//Lava script
-var lavaBuilding=0;
-var lavaCost=169690;
-function buyLava() {
-	if (hwDone < lavaCost) {
-        document.getElementById("messages").innerHTML = "You do not have enough credit to buy this item!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-    } else {
-        document.getElementById("messages").innerHTML = "You bought a patch of lava!";
-		setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-		lavaBuilding++;
-		hwDone = hwDone - lavaCost;
-		pagesPerSecond = pagesPerSecond + 2015;
-		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + pagesPerSecond.toFixed(1);
-		document.getElementById("lavaBuildingDisplay").innerHTML = lavaBuilding;
-		lavaCost = 169690 * Math.pow(1.15, lavaBuilding)
-		lavaCost = lavaCost.toFixed();
-		document.getElementById("lavaCostDisplay").innerHTML = "Cost: " + lavaCost + " Pages";
-    }
-}
-
 /*========================================================
 					WRITING SAVES
 ========================================================*/
@@ -524,6 +386,7 @@ var creditsSection = '<h2 id="updateheader">Credits:</h2>'+
 '<p>-Creative Guy: Jeffery L.</p>' +
 '<p>-Artist: Tian Z.</p>' +
 '<p>-Super Necessary Important Vital Rock to the Game: Michael S.</p>' +
+'<p>-Lead Tester: Yousif M. (a.k.a. Lead Testes)</p>' +
 '<p>-Script Writer: Kevin G.</p>'
 function viewCredits() {
 	document.getElementById("interfaceElementHolder").innerHTML = creditsSection;
@@ -532,30 +395,30 @@ function viewCredits() {
 				NEWS TICKER
 ========================================================*/
 function changeNews() {
-
+	var listOfNews = []
 }
 </script>
 
 <noscript>
-Sorry, your browser does not support JavaScript! Homework Clicker requires JavaScript to run!
-<q>You may have disabled JavaScript in your browser. In that case, enable it, and retry!</q>
--The Developers
+	Sorry, your browser does not support JavaScript! Homework Clicker requires JavaScript to run!
+	<q>You may have disabled JavaScript in your browser. In that case, enable it, and retry!</q>
+	-The Developers
 </noscript>
 </head>
 
 <body onload="startIncrementer()" onunload="saveGame()">
 
 <div id="header">
-<h1 id="headertitle">Homework Clicker v1.4</h1>
+	<h1 id="headertitle">Homework Clicker v1.4</h1>
 </div>
 <hr />
 
 <div id="interfaceWrap">
 <div id="hwHolder">
-<h1 id="hwDoneDisplay">Pages of Homework Done: 0</h1>
-<h4 id="ppsDisplay">Pages per second: 0</h4>
-<p>Click image to do homework</p>
-<img alt="Click to do homework" id="hwImage" src="https://lh6.googleusercontent.com/-F5Cea2oeyBc/VRHeEEzujEI/AAAAAAAACMY/1s9gqe_nf7U/w419-h542-no/homework.jpg" width="250px" height="300px"  onclick="doHw()"/>
+	<h1 id="hwDoneDisplay">Pages of Homework Done: 0</h1>
+	<h4 id="ppsDisplay">Pages per second: 0</h4>
+	<p>Click image to do homework</p>
+	<img alt="Click to do homework" id="hwImage" src="https://lh6.googleusercontent.com/-F5Cea2oeyBc/VRHeEEzujEI/AAAAAAAACMY/1s9gqe_nf7U/w419-h542-no/homework.jpg" width="250px" height="300px"  onclick="doHw()"/>
 </div>
 
 <div id="statsSection">
@@ -605,7 +468,8 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Pencil" id="buildingImage" src="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no" width="50px" height="50px"  onclick="buyPencil()"/>
+			<img alt="Pencil" src="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no" 
+			id="buildingImage" width="50px" height="50px" onclick="buyBuilding('pencil')"/>
 		</td>
 		<td>
 			<p id="pencilCostDisplay">Cost: 25 Pages</p>
@@ -625,7 +489,8 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Dog" id="buildingImage" src="https://lh6.googleusercontent.com/-p8XUdN0Ihb0/VNR5rrnjhXI/AAAAAAAAAA8/3URGjufliRQ/w1600-h1200/photo.jpg" width="50px" height="50px"  onclick="buyDog()"/>
+			<img alt="Dog" src="https://lh6.googleusercontent.com/-p8XUdN0Ihb0/VNR5rrnjhXI/AAAAAAAAAA8/3URGjufliRQ/w1600-h1200/photo.jpg" 
+			id="buildingImage" width="50px" height="50px" onclick="buyBuilding('dog')"/>
 		</td>
 		<td>
 			<p id="dogCostDisplay">Cost: 101 Pages</p>
@@ -644,7 +509,8 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Computer" id="buildingImage" src="https://lh3.googleusercontent.com/-F0yEbufozXA/VQDns833VjI/AAAAAAAACJ0/qN5rqsu0of0/w227-h228-p/computer.jpg" width="50px" height="50px"  onclick="buyComputer()"/>
+			<img alt="Computer" src="https://lh3.googleusercontent.com/-F0yEbufozXA/VQDns833VjI/AAAAAAAACJ0/qN5rqsu0of0/w227-h228-p/computer.jpg"
+			id="buildingImage"  width="50px" height="50px" onclick="buyBuilding('computer')"/>
 		</td>
 		<td>
 			<p id="computerCostDisplay">Cost: 442 Pages</p>
@@ -663,7 +529,8 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Library" id="buildingImage" src="https://lh5.googleusercontent.com/-JXqt42yXO3U/VRCxzl5hRbI/AAAAAAAACLA/9-IFLtaOH_U/w269-h162-no/bookshelf.jpg" width="50px" height="50px"  onclick="buyLibrary()"/>
+			<img alt="Library" src="https://lh5.googleusercontent.com/-JXqt42yXO3U/VRCxzl5hRbI/AAAAAAAACLA/9-IFLtaOH_U/w269-h162-no/bookshelf.jpg" 
+			id="buildingImage" width="50px" height="50px" onclick="buyBuilding('library')"/>
 		</td>
 		<td>
 			<p id="libraryCostDisplay">Cost: 1027 Pages</p>
@@ -682,7 +549,8 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Tutor" id="buildingImage" src="https://tupalo.s3.amazonaws.com/s/tampa-florida/kumon-of-town-and-country-5143518-fe.jpg" width="50px" height="50px"  onclick="buyTutor()"/>
+			<img alt="Tutor" src="https://tupalo.s3.amazonaws.com/s/tampa-florida/kumon-of-town-and-country-5143518-fe.jpg"
+			id="buildingImage" width="50px" height="50px" onclick="buyBuilding('tutor')"/>
 		</td>
 		<td>
 			<p id="tutorCostDisplay">Cost: 5678 Pages</p>
@@ -701,7 +569,8 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Research Institute" id="buildingImage" src="http://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-580x288/public/news/research/news/121106heart-and-lung-research-institute.jpg?itok=3DfCO5Kl" width="50px" height="50px"  onclick="buyInstitute()"/>
+			<img alt="Research Institute" src="http://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-580x288/public/news/research/news/121106heart-and-lung-research-institute.jpg?itok=3DfCO5Kl" 
+			id="buildingImage" width="50px" height="50px"  onclick="buyBuilding('institute')"/>
 		</td>
 		<td>
 			<p id="instituteCostDisplay">Cost: 30000 Pages</p>
@@ -720,7 +589,8 @@ Sorry, your browser does not support JavaScript! Homework Clicker requires JavaS
 	</tr>
 	<tr>
 		<td>
-			<img alt="Lava" id="buildingImage" src="http://hydra-media.cursecdn.com/minecraft.gamepedia.com/2/27/Lava.png?version=5a751570cb4de22cba7628f8fe2a3a66" width="50px" height="50px"  onclick="buyLava()"/>
+			<img alt="Lava" src="http://hydra-media.cursecdn.com/minecraft.gamepedia.com/2/27/Lava.png?version=5a751570cb4de22cba7628f8fe2a3a66" 
+			id="buildingImage" width="50px" height="50px"  onclick="buyBuilding('lava')"/>
 		</td>
 		<td>
 			<p id="lavaCostDisplay">Cost: 169690 Pages</p>
