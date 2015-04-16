@@ -186,20 +186,22 @@ function update() {
 		document.getElementById(buildings[i].buildingType + "CostDisplay").innerHTML = "Cost: " + buildings[i].cost + " Pages";
 	}
 	setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(Game.hwDone);}, 50);
-	setInterval(function (){Game.hwDone += Game.pagesPerSecond/20; Game.hwEarned += Game.pagesPerSecond/20;}, 50);
+	if (Game.pagesPerSecond!=0) {
+		setInterval(function (){Game.hwDone += Game.pagesPerSecond/20; Game.hwEarned += Game.pagesPerSecond/20;}, 50);
+	}
 	document.getElementById("ppsDisplay").innerHTML = Game.pagesPerSecond;
 }
 /*========================================================
 					BUILDING SCRIPTS
 ========================================================*/
 var buildings = {pencilBuilding:0,dogBuilding:0,computerBuilding:0,libraryBuilding:0,tutorBuilding:0,instituteBuilding:0,lavaBuilding:0};
-buildings.pencilBuilding = {buildingType:pencil,baseCost:25,cost:25,basePps:0.2,multiplier:1};
-buildings.dogBuilding = {buildingType:dog,baseCost:101,cost:101,basePps:1,multiplier:1};
-buildings.computerBuilding = {buildingType:computer,baseCost:442,cost:442,basePps:5,multiplier:1};
-buildings.libraryBuilding = {buildingType:library,baseCost:1027,cost:1027,basePps:12,multiplier:1};
-buildings.tutorBuilding = {buildingType:tutor,baseCost:5678,cost:5678,basePps:69,multiplier:1};
-buildings.instituteBuilding = {buildingType:institute,baseCost:30000,cost:30000,basePps:365,multiplier:1};
-buildings.lavaBuilding = {buildingType:lava,baseCost:169690,ost:169690,basePps:2015,multiplier:1};
+buildings.pencilBuilding = {buildingType:'pencil',baseCost:25,cost:25,basePps:0.2,multiplier:1};
+buildings.dogBuilding = {buildingType:'dog',baseCost:101,cost:101,basePps:1,multiplier:1};
+buildings.computerBuilding = {buildingType:'computer',baseCost:442,cost:442,basePps:5,multiplier:1};
+buildings.libraryBuilding = {buildingType:'library',baseCost:1027,cost:1027,basePps:12,multiplier:1};
+buildings.tutorBuilding = {buildingType:'tutor',baseCost:5678,cost:5678,basePps:69,multiplier:1};
+buildings.instituteBuilding = {buildingType:'institute',baseCost:30000,cost:30000,basePps:365,multiplier:1};
+buildings.lavaBuilding = {buildingType:'lava',baseCost:169690,ost:169690,basePps:2015,multiplier:1};
 
 function buyBuilding(bdType) {
 	var buildingType = bdType + "Building";
