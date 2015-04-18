@@ -136,8 +136,8 @@ function doHw() {
 
 //Increment Homework Done at a bit less than 30 fps, add it to the hwDoneDisplay
 function startIncrementer() {
-	setInterval(function (){update()}, 40);
-	setInterval(function (){autoSaveGame()}, 60000);
+	setInterval(function (){update()}, 50);
+	setInterval(function (){saveGame(auto)}, 60000);
 	setInterval(function (){changeNews()}, 10000);
 	loadSave(); //Load in the latest save, details in the "load save" script
 	viewMenu(); //Change the middle section to the menu
@@ -147,27 +147,17 @@ function startIncrementer() {
 function reset() {  
 	var r = window.prompt("Do you really want to reset? Type in 'Yes' to confirm.");
 	if (r.toLowerCase() === "yes")
-		{	
-		hwDone = 0;
-		pagesPerSecond = 0;
-		pencilBuilding = 0;
-		dogBuilding = 0;
-		computerBuilding = 0;
-		libraryBuilding = 0;
-		tutorBuilding = 0;
-		instituteBuilding = 0;
-		lavaBuilding = 0;
-		pencilCost = 25;
-		dogCost = 101;
-		computerCost = 442;
-		libraryCost = 1027;
-		tutorCost = 5678;
-		instituteCost = 30000;
-		lavaCost = 169690;
-		update()
+		{
+		for (i in Game) {
+			Game[i] = 0;
 		}
-	else
-	{ }
+		for (i in buildings) {
+			buildings[i] = 0;
+			buildings[i].cost = buildings[i].baseCost;
+			buildings[i].multiplier = 1;
+		}
+	}
+	else { }
 }
 function choose(arr) {
 	return arr[Math.floor(Math.random()*arr.length)];
@@ -182,80 +172,60 @@ function update() {
 	for (i in buildings) {
 		Game.pagesPerSecond += buildings[i].basePps * buildings[i].multiplier; //Calculating pages per second
 		buildings[i].cost *= Math.pow(1.15, buildings[i]) //Calculating building costs
-		document.getElementById(i + "Display").innerHTML = buildings[i];
-		document.getElementById(buildings[i].buildingType + "CostDisplay").innerHTML = "Cost: " + buildings[i].cost + " Pages";
+		document.getElementById(i + "Display").innerHTML = buildings[i];                                            
+		document.getElementById("pencilCostDisplay").innerHTML = "Cost: " + buildings[i].cost + " Pages";
 	}
-	setInterval(function (){document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(Game.hwDone);}, 50);
-	if (Game.pagesPerSecond!=0) {
-		setInterval(function (){Game.hwDone += Game.pagesPerSecond/20; Game.hwEarned += Game.pagesPerSecond/20;}, 50);
-	}
+	setInterval(function (){Game.hwDone += Game.pagesPerSecond/20;}, 50);
+	setInterval(function (){Game.hwEarned += Game.pagesPerSecond/20;}, 50);
 	document.getElementById("ppsDisplay").innerHTML = Game.pagesPerSecond;
+	document.getElementById("hwDoneDisplay").innerHTML="Pages of Homework Done: " + Math.round(Game.hwDone);
+	Game.pagesPerSecond = 0;
 }
 /*========================================================
 					BUILDING SCRIPTS
 ========================================================*/
 var buildings = {pencilBuilding:0,dogBuilding:0,computerBuilding:0,libraryBuilding:0,tutorBuilding:0,instituteBuilding:0,lavaBuilding:0};
-buildings.pencilBuilding = {buildingType:'pencil',baseCost:25,cost:25,basePps:0.2,multiplier:1};
-buildings.dogBuilding = {buildingType:'dog',baseCost:101,cost:101,basePps:1,multiplier:1};
-buildings.computerBuilding = {buildingType:'computer',baseCost:442,cost:442,basePps:5,multiplier:1};
-buildings.libraryBuilding = {buildingType:'library',baseCost:1027,cost:1027,basePps:12,multiplier:1};
-buildings.tutorBuilding = {buildingType:'tutor',baseCost:5678,cost:5678,basePps:69,multiplier:1};
-buildings.instituteBuilding = {buildingType:'institute',baseCost:30000,cost:30000,basePps:365,multiplier:1};
-buildings.lavaBuilding = {buildingType:'lava',baseCost:169690,ost:169690,basePps:2015,multiplier:1};
+buildings.pencilBuilding = {buildingType:"pencil",baseCost:25,cost:25,basePps:0.2,multiplier:1};
+buildings.dogBuilding = {buildingType:"dog",baseCost:101,cost:101,basePps:1,multiplier:1};
+buildings.computerBuilding = {buildingType:"computer",baseCost:442,cost:442,basePps:5,multiplier:1};
+buildings.libraryBuilding = {buildingType:"library",baseCost:1027,cost:1027,basePps:12,multiplier:1};
+buildings.tutorBuilding = {buildingType:"tutor",baseCost:5678,cost:5678,basePps:69,multiplier:1};
+buildings.instituteBuilding = {buildingType:"institute",baseCost:30000,cost:30000,basePps:365,multiplier:1};
+buildings.lavaBuilding = {buildingType:"lava",baseCost:169690,cost:169690,basePps:2015,multiplier:1};
 
 function buyBuilding(bdType) {
 	var buildingType = bdType + "Building";
 	var buildingCost = buildings[buildingType].cost;
-	if (hwDone < buildingCost) {
+	if (Game.hwDone < buildingCost) {
 		notice('You do not have enough credit to buy this item!');
 	} else {
 		notice('You bought a ' + bdType + '!');
 		buildings[buildingType]++;
-		hwDone -= buildingCost;
-		pagesPerSecond += buildings[buildingType].basePps;
+		Game.hwDone -= buildingCost;
 	}
 		
 }
 /*========================================================
 					WRITING SAVES
 ========================================================*/
-var str;
-var encryptStr;
-function autoSaveGame() {
-	document.getElementById("messages").innerHTML = "Game Saved!";
-	setTimeout(function(){document.getElementById("messages").innerHTML = "";},3000);
-	saveGame();
-}
-function saveGame() {
-	createSave();
-	encryptSave();
-	window.localStorage.setItem("hwClickerSave",str); //aaand save
-}
-function exportSave() {
-	prompt;
-	createSave();
-	encryptSave();
-	prompt = window.prompt("This is your exported save. Copy it and keep it somewhere safe!",str);
-	prompt = null;
-}
-function createSave() {
-	var buildingAmountArray = [pencilBuilding, dogBuilding, computerBuilding, libraryBuilding, tutorBuilding, instituteBuilding, lavaBuilding];
-	var buildingCostArray = [pencilCost, dogCost, computerCost, libraryCost, tutorCost, instituteCost, lavaCost];
+
+function saveGame(method) {
+	var str;
+	if (method == 'auto') {
+		notice('Game Saved!');
+	}
 	str = "save455;"+
 		  parseInt(Math.floor(hwDone))+";"+ //add hw already done
 		  parseFloat(pagesPerSecond) +";"; //add current pps
-	for (buildingLoopIndex = 0; buildingLoopIndex < buildingAmountArray.length; buildingLoopIndex++) {
+	for (i= 0; i < buildingAmountArray.length; i++) {
 		str += buildingAmountArray[buildingLoopIndex]+";"; //add all the building amounts
 	}
-	for (buildingCostLoopIndex = 0; buildingCostLoopIndex < buildingCostArray.length; buildingCostLoopIndex++) {
+	for (i = 0; i < buildingCostArray.length; i++) {
 		str += buildingCostArray[buildingCostLoopIndex]+";"; //add all the building cost amounts
 	}
 	str = escape(str);    //convert symbols to weird stuff
-}
-function encryptSave() {
-	encryptStr = str.split("");
-		for (i = 0; i < encryptStr.length; i++)
-		{
+	var encryptStr = str.split(""); //ENCRYPTION!
+	for (i = 0; i < encryptStr.length; i++) {
 		if (encryptStr[i]==1)
 			encryptStr[i]=6;
 		else if (encryptStr[i]==2)
@@ -277,10 +247,18 @@ function encryptSave() {
 		else if(encryptStr[i]==0)
 			encryptStr[i]=9;
 		else {}
-		}
+	}
 	str = "";
 	for (i = 0; i < encryptStr.length; i++) {
 		str += encryptStr[i];
+	}
+	alert(method);
+	if (method == 'export') {
+		var prompt = window.prompt("This is your exported save. Copy it and keep it somewhere safe!",str);
+		prompt = null;
+	}
+	else {
+	window.localStorage.setItem("hwClickerSave",str); //aaand save
 	}
 }
 /*========================================================
@@ -353,7 +331,7 @@ function processSave() {
 var menuSection = '<h2 id="updateheader">Menu</h2>'+
 '<p>You are playing Homework Clicker v1.4</p>'+
 '<button onclick="reset()">Reset Game</button>'+ //hrm updateheader...
-'<button onclick="exportSave()">Export Save</button>'+
+'<button onclick="saveGame(export)">Export Save</button>'+
 '<button onclick="importSave()">Import Save</button>';
 function viewMenu() {
 	document.getElementById("interfaceElementHolder").innerHTML = menuSection;
@@ -408,7 +386,7 @@ function changeNews() {
 </noscript>
 </head>
 
-<body onload="startIncrementer()" onunload="saveGame()">
+<body onload="startIncrementer()" onunload="saveGame(closeGame)">
 
 <div id="header">
 	<h1 id="headertitle">Homework Clicker v1.4</h1>
