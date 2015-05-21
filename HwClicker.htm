@@ -257,6 +257,38 @@ var str = "v1.4.6|";
 		str += ';';
 	}
 	str = escape(str);    //convert symbols to weird stuff
+	var encryptStr = str.split(""); //ENCRYPTION!
+	for (var i = 0; i < encryptStr.length; i++) {
+		if (encryptStr[i]==1)
+			encryptStr[i]='F';		//Password: FGHIJKLMNOPQ
+		else if (encryptStr[i]==2)	//Corresponding: 1234567890%.
+			encryptStr[i]='G';
+		else if (encryptStr[i]==3)
+			encryptStr[i]='H';
+		else if (encryptStr[i]==4)
+			encryptStr[i]='I';
+		else if (encryptStr[i]==5)
+			encryptStr[i]='J';
+		else if (encryptStr[i]==6)
+			encryptStr[i]='K';
+		else if (encryptStr[i]==7)
+			encryptStr[i]='L';
+		else if (encryptStr[i]==8)
+			encryptStr[i]='M';
+		else if (encryptStr[i]==9)
+			encryptStr[i]='N';
+		else if (encryptStr[i]==0)
+			encryptStr[i]='O';
+		else if (encryptStr[i]=='%')
+			encryptStr[i]='P';
+		else if (encryptStr[i]=='.')
+			encryptStr[i]='Q';
+		else {}
+	}
+	str = "";
+	for (var i = 0; i < encryptStr.length; i++) {
+		str += encryptStr[i];
+	}
 	if (method == 'exportSave') {
 		var prompt = window.prompt("This is your exported save. Copy it and keep it somewhere safe!",str);
 		prompt = null;
@@ -275,6 +307,38 @@ function processSave(method) {
 		completeSave = window.localStorage.getItem("hwClickerSave");  //getting the save
 	}
 	if (completeSave != null) {
+		var deEncrypt = completeSave.split("");
+		for (var i = 0; i < deEncrypt.length; i++) {
+			if (deEncrypt[i]=='F')
+				deEncrypt[i]=1;		//Password: FGHIJKLMNOPQ
+			else if (deEncrypt[i]=='G')	//Corresponding: 1234567890%.
+				deEncrypt[i]=2;
+			else if (deEncrypt[i]=='H')
+				deEncrypt[i]=3;
+			else if (deEncrypt[i]=='I')
+				deEncrypt[i]=4;
+			else if (deEncrypt[i]=='J')
+				deEncrypt[i]=5;
+			else if (deEncrypt[i]=='K')
+				deEncrypt[i]=6;
+			else if (deEncrypt[i]=='L')
+				deEncrypt[i]=7;
+			else if (deEncrypt[i]=='M')
+				deEncrypt[i]=8;
+			else if (deEncrypt[i]=='N')
+				deEncrypt[i]=9;
+			else if (deEncrypt[i]=='O')
+				deEncrypt[i]=0;
+			else if (deEncrypt[i]=='P')
+				deEncrypt[i]='%'
+			else if (deEncrypt[i]=='Q')
+				deEncrypt[i]='.';
+			else {}
+		}
+	completeSave = "";
+	for (var i = 0; i < deEncrypt.length; i++) {
+		completeSave += deEncrypt[i];
+	}
 	completeSave = unescape(completeSave);
 		completeSave = completeSave.split("|");
 		if (completeSave[0] == "v1.4.6") {
