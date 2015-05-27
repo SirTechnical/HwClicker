@@ -18,12 +18,13 @@ Retired Developers		-Upgrade/Achievement/Description Maker: Edwin Z.
     Note: Remove this if you want to use external style sheets, but for now leave it like this. -->
 
 <style type="text/css">
-/* Word/Header Styles */
+/*================================== Word/Header Styles =====================================*/
 body {
 	font-family:Calibri;
 	text-align:center;
+	overflow:hidden;
 }
-#updateheader {
+.updateheader {
 	color:#6495ed;
 }
 li, p {
@@ -34,7 +35,6 @@ q {
 }
 #newsTicker {
 	color:#663300;
-	font-size:20;
 }
 #hwDoneDisplay, h2 , h3, h4 {
 	color:#B0C0D0;
@@ -42,80 +42,105 @@ q {
 #ppsDisplay {
 	color:#C0D0F0;
 }
+#headertitle {
+	font-size:30px;
+	margin:0px;
+}
 #headertitle, #shopHeader, #interfaceHeader, #loading {
 	color:#1a1a1a;
 }
 #messages {
 	color:#999900;
 }
-/* DIV styles start here */
+/* ================================DIV styles start here ================================*/
 #header {
 	background-color:#FFFF88;
-	height: 10%;
+	border-bottom-style: solid;
+	border-width: 0.1vw;
+	height:9vh;
+}
+#interfaceWrap {
+	max-height:89.9vh;
 }
 #hwHolder {
-	line-height:30px;
 	background-color:#eeeeee;
-	height:551px;
-	width:30%;
+	height:89.9vh;
+	width:29.9vw;
 	float:left;	      
 }
 #statsSection {
 	border-left-style: solid;
-	border-width: 1px;
-	width:40%;
-	height:551px;
+	border-width: 0.1vw;
+	height:89.9vh;
+	width:40vw;
 	float:left;
 }
 #shop {
 	background-color:#99FFCC;
-	width:;
-	height:521px;
 	float:right;
-	overflow: scroll;	 	 
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height:100%;	
 }
 #shopWrap {
 	border-left-style: solid;
-	border-width: 1px;
+	border-width: 0.1vw;
 	background-color:#99FFCC;
-	width:29.9%;
-	height:551px;
-	float:left;
+	width:auto;
+	height:89.9vh;
+	max-width:30vw;
+	float:right;
 }
 #interfaceElementHolder {
 	background-color:#99FF99;
-	height:461px;
-	overflow: scroll;
+	height:71vh;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
-/* Shop Element styles start here */
-#buildingDescription{
+/* ===================================Shop Element styles start here ==========================*/
+.buildingDescription{
 	color:#0000FF;
 }
-#buildingImage{
+.buildingImage{
 	float:left;
 }
 #pencilBuildingDisplay, #dogBuildingDisplay, #computerBuildingDisplay, #libraryBuildingDisplay, #tutorBuildingDisplay, #instituteBuildingDisplay, #lavaBuildingDisplay {
 	float:right; /* All the building displayes */
 	color:#B0C0D0;
 }
-/* Table Styles Start Here */
+/*==================================== Table Styles Start Here ============================*/
 #shop td {
 	text-align:left;
 }
+#frame {
+	width:100vw;
+	height:100vh;
+	max-height:100vh;
+	position: absolute;
+    top:0px;
+    left:0px;
+	border-spacing:0px;
+}
 #interfaceMenuFrame {
-	width:510px;
-	height:100px;
+	width:40vw;
+	height:87vh;
 	text-align:center;
 }
-#toggleInterfaceHolder {
+.toggleInterfaceHolder {
 	background-color:#FFFF66;
 }
 #newsHolder {
 	background-color:#99CCFF;
-	height:100px;
 }
-/* Misc. Styles Start here */
-
+td {
+	padding:0px;
+	margin:0px;
+	border:0px;
+}
+/*========================================== Misc. Styles Start here =============================*/
+img, button, .toggleInterfaceHolder {
+	cursor:pointer;
+}
 </style>
 <script type="text/javascript">
 /* All code contained was made by Kevin G. with help from Michael S. and design from Jeffery L. and Edwin Z.
@@ -143,22 +168,33 @@ function startIncrementer() {
 	setInterval(function (){saveGame('auto')}, 60000);
 	viewSection('menu'); //Change the middle section to the menu
 	processSave('onload');
+	recomputeHps();
+	document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + Game.pagesPerSecond;
+	for (var i in buildings) {
+		var updateBdShort = buildings[i].buildingType;
+		document.getElementById(i + "Display").innerHTML = buildings[i].amount;                                            
+		document.getElementById(updateBdShort + "CostDisplay").innerHTML = "Cost: " + buildings[i].cost + " Pages";
+	}
 }
 
 //RESETTING
 function reset() {  
 	var r = window.prompt("Do you really want to reset? Type in 'Yes' to confirm.");
-	if (r.toLowerCase() === "yes") {
-		for (var i in Game) {
-			Game[i] = 0;
-		}
-		for (var i in buildings) {
-			buildings[i].amount = 0;
-			buildings[i].cost = buildings[i].baseCost;
-			buildings[i].multiplier = 1;
-			var resetBdShort = buildings[i].buildingType;
-			document.getElementById(i + "Display").innerHTML = buildings[i].amount;                                            
-			document.getElementById(resetBdShort + "CostDisplay").innerHTML = "Cost: " + buildings[i].cost + " Pages";
+	if (r != null) {
+		if (r.toLowerCase() === "yes") {
+			for (var i in Game) {
+				Game[i] = 0;
+			}
+			for (var i in buildings) {
+				buildings[i].amount = 0;
+				buildings[i].cost = buildings[i].baseCost;
+				buildings[i].multiplier = 1;
+				var resetBdShort = buildings[i].buildingType;
+				document.getElementById(i + "Display").innerHTML = buildings[i].amount;                                            
+				document.getElementById(resetBdShort + "CostDisplay").innerHTML = "Cost: " + buildings[i].cost + " Pages";
+			}
+			recomputeHps();
+			document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + Game.pagesPerSecond;
 		}
 	}
 }
@@ -168,9 +204,18 @@ function choose(arr) {
 function notice(string) { // FINISH THIS MAKE A CONSTRUCTOR FOR POPUPS
 	//alert(string);
 }
-function giveTestingHw() {
-Game.hwDone += 9999999;
-Game.hwEarned += 9999999;
+/*========================================================
+					SHI CODES
+========================================================*/
+function enterShiCode() {
+	var shiCode = window.prompt("Enter your Shi Code here");
+	if (shiCode != null) {
+		shiCode1 = shiCode.split('y');													//TESTERSONLY shi code
+		if (shiCode1[0] == "testersonl" && parseInt(shiCode1) != NaN) {
+			Game.hwDone += parseInt(shiCode1[1]);
+			Game.hwEarned += parseInt(shiCode1[1]);
+		}
+	}
 }
 /*========================================================
 					UPDATERS
@@ -186,10 +231,11 @@ function purchaseUpdate(updateType) {
 		var updateBdShort = updateType[1];
 		var updateBuilding = updateBdShort + "Building";
 		buildings[updateBuilding].cost *= Math.pow(1.15, buildings[updateBuilding].amount) //Calculating building costs
-		document.getElementById(updateBuilding + "Display").innerHTML = buildings[updateBuilding].amount;                                            
-		document.getElementById(updateBdShort + "CostDisplay").innerHTML = "Cost: " + buildings[updateBuilding].cost.toFixed() + " Pages";
-		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + Game.pagesPerSecond;
+		document.getElementById(updateBuilding + "Display").innerHTML = buildings[updateBuilding].amount;
+		buildings[updateBuilding].cost = buildings[updateBuilding].cost.toFixed();
+		document.getElementById(updateBdShort + "CostDisplay").innerHTML = "Cost: " + buildings[updateBuilding].cost + " Pages";
 		recomputeHps();
+		document.getElementById("ppsDisplay").innerHTML = "Pages per second: " + Game.pagesPerSecond;
 	}
 	else if (updateType[0] === "upgrade") {
 		alert("upgrade");
@@ -204,7 +250,14 @@ function recomputeHps(){
 		pagesPerSecond += buildings[i].amount * buildings[i].basePps * buildings[i].multiplier;
 	}
 	pagesPerSecond *= generalMultiplier;
-	Game.pagesPerSecond = pagesPerSecond;
+	//Decimal remover
+	var removeDecimal = parseFloat(pagesPerSecond.toFixed(1));
+	pagesPerSecond = parseInt(pagesPerSecond.toFixed());
+	if (pagesPerSecond + 4.2 == removeDecimal + 4.2) {
+		Game.pagesPerSecond = pagesPerSecond;
+	} else {
+		Game.pagesPerSecond = removeDecimal;
+	}
 }
 /*========================================================
 					BUILDING SCRIPTS
@@ -235,6 +288,12 @@ function buyBuilding(bdType) {
 ========================================================*/
 
 /*========================================================
+					TOGGLE SHOP AREA
+========================================================*/
+function viewShopSection(section) {
+	
+}
+/*========================================================
 					ACHEIVEMENTS
 ========================================================*/
 
@@ -242,21 +301,32 @@ function buyBuilding(bdType) {
 					WRITING SAVES
 ========================================================*/
 function saveGame(method) {
-var str = "v1.4.6|";
-	for (var i in Game) { 
-		str += Game[i]; 				//Add in all the Game values
+	var str = "v1.4.6|";
+	var gameSave = {};
+	for (var i in Game) {
+		gameSave[i] = Game[i];
+		//Decimal remover
+		gameSave[i] = parseFloat(gameSave[i]);
+		var removeDecimal = gameSave[i];
+		if (gameSave[i] + 4.2 == gameSave[i] + 4.2) {
+			gameSave[i] = removeDecimal.toFixed();
+		} else {
+			gameSave[i] = removeDecimal.toFixed(1);
+		}
+		str += gameSave[i]; 				//Add in all the Game values
 		str += ';';
 	}
 	str += "|";							//Makes it easier for splitting
 	for (var i in buildings) {
-		str += buildings[i].amount	;		//Buildings and building costs
-		str += '.';
+		str += buildings[i].amount	;		//Buildings, building costs and multipliers
+		str += '~';
 		str += buildings[i].cost;
-		str += '.';
+		str += '~';
 		str += buildings[i].multiplier;
 		str += ';';
 	}
 	str = escape(str);    //convert symbols to weird stuff
+	
 	var encryptStr = str.split(""); //ENCRYPTION!
 	for (var i = 0; i < encryptStr.length; i++) {
 		if (encryptStr[i]==1)
@@ -332,7 +402,7 @@ function processSave(method) {
 			else if (deEncrypt[i]=='P')
 				deEncrypt[i]='%'
 			else if (deEncrypt[i]=='Q')
-				deEncrypt[i]='.';
+				deEncrypt[i]='.'
 			else {}
 		}
 	completeSave = "";
@@ -352,10 +422,25 @@ function processSave(method) {
 			index = 0;
 			var str = "";
 			for (var i in buildings) {
-				str = buildingSave[index].split(".");
+				str = buildingSave[index].split("~");
 				buildings[i].amount = str[0];
 				buildings[i].cost = str[1];
 				buildings[i].multiplier = str[2];
+				index++;
+			}
+		}
+		else {
+			alert("You are importing an outdated save from HwClicker v1.4.1. Load in your saves and export them again to convert them to v1.4.6 ones. If this is not the case, contact Kevin.");
+			var splitSave = completeSave[0].split(";");
+			Game.hwDone = parseInt(splitSave[0]);
+			Game.pagesPerSecond = parseFloat(splitSave[1]);
+			var index = 2;
+			for (var i in buildings) {
+				buildings[i].amount = parseInt(splitSave[index]);
+				index++;
+			}
+			for (var i in buildings) {
+				buildings[i].cost = parseInt(splitSave[index]);
 				index++;
 			}
 		}
@@ -369,20 +454,27 @@ var interfaceArea = {menuPart:null, statsPart:null, updatesPart:null, creditsPar
 //===================MENU====================
 var exportSave = "exportSave";
 var importSave = "importSave"; 
-interfaceArea.menuPart = '<h2 id="updateheader">Menu</h2>'+
+interfaceArea.menuPart = '<h2 id="menuHeader">Menu</h2>'+
 '<p>You are playing Homework Clicker v1.4</p>'+
 '<button onclick="reset()">Reset Game</button>'+ //hrm updateheader...
 '<button onclick="saveGame(exportSave)">Export Save</button>'+
-'<button onclick="retrieveSave(importSave)">Import Save</button>'+
-'<button onclick="giveTestingHw()">FOR TESTING USE ONLY! (gives 9999999 free homework)</button>';
+'<button onclick="processSave(importSave)">Import Save</button>'
+
++'<button onclick="enterShiCode()">Use Shi Code</button>'; //===========================SHI CODES====================================================
+
 //===================STATS====================
-interfaceArea.statsPart = '<h2 id="updateheader">Stats</h2>';
+interfaceArea.statsPart = '<h2 id="statsHeader">Stats</h2>'+
+'<h3 id="achievementsHeader">Achievements</h3>'
 
 //===================UPGRADES====================
-interfaceArea.updatesPart = '<h2 id="updateheader">Updates:</h2>' + 
-'<h4>Version 1.5</h4><ul>' +
+interfaceArea.updatesPart = '<h2 id="updateHeader">Updates:</h2>' + 
+'<h4>Version 1.5</h4><h3>Sometime in the future</h3><ul>' +
 	"<li>You can now export and import your saves!</li>" +
 	"<li>Behind the scene changes, such as much more efficient code!</li>" +
+	//"<li>Added the answer to life, the universe and everyting.</li>" +
+'</ul><h4>Version 1.4.6</h4><h3>May 22, 2015</h3><ul>' +
+	"<li>Major milestone for Homework Clicker! The code is now much more efficient for future updates, and the base has been laid for 1.5, the big one!</li>" +
+	'<li>The notorious pencil bug has retured!</li>'+
 '</ul><h4>Version 1.4</h4><ul>' +
 	"<li>Introducing more buildings including the research institute and lava! What are they for? Don't ask.</li>" +
 	'<li>Minor bugfixes such as when buying more than 3 pencils creates many digits behind the decimal point.</li>'+
@@ -399,8 +491,8 @@ interfaceArea.updatesPart = '<h2 id="updateheader">Updates:</h2>' +
 	"<li>Clicking button increases the amount of homework you've done!</li>" +
 '</ul>';
 
-//===================STATS====================
-interfaceArea.creditsPart = '<h2 id="updateheader">Credits:</h2>'+
+//===================CREDITS====================
+interfaceArea.creditsPart = '<h2 id="creditsHeader">Credits:</h2>'+
 '<p>-Upgrade/Achievement/Description Maker: Edwin Z.</p>' +
 '<p>-Creative Guy: Jeffery L.</p>' +
 '<p>-Artist: Tian Z.</p>' +
@@ -412,7 +504,6 @@ interfaceArea.creditsPart = '<h2 id="updateheader">Credits:</h2>'+
 function viewSection(section) {
 	document.getElementById("interfaceElementHolder").innerHTML = interfaceArea[section + "Part"];
 }
-
 /*========================================================
 				NEWS TICKER
 ========================================================*/
@@ -430,208 +521,212 @@ function changeNews() {
 
 <body onload="startIncrementer()" onunload="saveGame('closeGame')">
 
-<div id="header">
-	<h1 id="headertitle">Homework Clicker v1.4</h1>
-</div>
-<hr />
-
-<div id="interfaceWrap">
-<div id="hwHolder">
-	<h1 id="hwDoneDisplay">Pages of Homework Done: 0</h1>
-	<h4 id="ppsDisplay">Pages per second: 0</h4>
-	<p>Click image to do homework</p>
-	<img alt="Click to do homework" id="hwImage" srcc="https://lh6.googleusercontent.com/-F5Cea2oeyBc/VRHeEEzujEI/AAAAAAAACMY/1s9gqe_nf7U/w419-h542-no/homework.jpg" width="250px" height="300px"  onclick="doHw()"/>
-</div>
-
-<div id="statsSection">
-<table id="interfaceMenuFrame" border="0">
+<table id="frame" border="0">
 	<tr>
-		<td id="toggleInterfaceHolder" onclick="viewSection('menu')">	
-			<h3 id="interfaceHeader">Menu</h3>
-		</td>
-		<td id="newsHolder" rowspan="2">
-			<p id="newsTicker">News (Coming soon!)<br/> -The Developers</p>
-		</td>
-		<td id="toggleInterfaceHolder" onclick="viewSection('stats')">	
-			<h3 id="interfaceHeader">Stats</h3>
+		<td colspan="3" id="header">
+			<h3 id="headertitle">Homework Clicker v1.4</h3>
 		</td>
 	</tr>
-	<tr>
-		<td id="toggleInterfaceHolder" onclick="viewSection('updates')">	
-			<h3 id="interfaceHeader">Updates</h3>
+	<tr id="interfaceWrap">
+		<td id="hwHolder">
+			<h1 id="hwDoneDisplay">Pages of Homework Done: 0</h1>
+			<h4 id="ppsDisplay">Pages per second: 0</h4>
+			<p>Click image to do homework</p>
+			<img alt="Click to do homework" id="hwImage" srcc="https://lh6.googleusercontent.com/-F5Cea2oeyBc/VRHeEEzujEI/AAAAAAAACMY/1s9gqe_nf7U/w419-h542-no/homework.jpg" width="250px" height="300px"  onclick="doHw()"/>
 		</td>
-		<td id="toggleInterfaceHolder" onclick="viewSection('credits')">	
-			<h3 id="interfaceHeader">Credits</h3>
+		<td id="statsSection">
+			<table id="interfaceMenuFrame" border="0">
+				<tr>
+					<td class="toggleInterfaceHolder" onclick="viewSection('menu')">	
+						<h3 class="interfaceHeader">Menu</h3>
+					</td>
+					<td id="newsHolder" rowspan="2">
+						<p id="newsTicker">News (Coming soon!)<br /> -The Developers</p>
+					</td>
+					<td class="toggleInterfaceHolder" onclick="viewSection('stats')">	
+						<h3 class="interfaceHeader">Stats</h3>
+					</td>
+				</tr>
+				<tr>
+					<td class="toggleInterfaceHolder" onclick="viewSection('updates')">	
+						<h3 class="interfaceHeader">Updates</h3>
+					</td>
+					<td class="toggleInterfaceHolder" onclick="viewSection('credits')">	
+						<h3 class="interfaceHeader">Credits</h3>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<div id="interfaceElementHolder">
+							<h1 id="loading">Please wait....</h1>
+						</div>
+					</td>
+			</table>
+		</td>
+		<td>
+			<table id="shopWrap">
+				<tr>
+					<td>
+						<tr>
+							<td colspan="2">
+								<h2 id="shopHeader">Shop</h2>
+							</td>
+						</tr>
+						<tr>
+							<td class="toggleShopHolder" onclick="viewShopSection('buildings')">	
+								<h3 class="interfaceHeader">Buildings</h3>
+							</td>
+							<td class="toggleShopHolder" onclick="viewShopSection('upgrades')">	
+								<h3 class="interfaceHeader">Upgrades</h3>
+							</td>
+						</tr>
+						<div id="shop">
+							<tr> <!--Pencil Section-->
+								<td>
+									<h3>Pencil</h3>
+								</td>
+								<td colspan="2">
+									<p class="buildingDescription" color="blue">In case you break one.</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img alt="Pencil" srcc="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no" 
+									class="buildingImage" width="50px" height="50px" onclick="buyBuilding('pencil')"/>
+								</td>
+								<td>
+									<p id="pencilCostDisplay">Cost: 25 Pages</p>
+								</td>
+								<td>
+									<h4 id="pencilBuildingDisplay">0</h4>
+								</td>
+							</tr>
+							<tr> <!--Dog Section-->
+								<td>
+									<h3>Dog</h3>
+								</td>
+								<td colspan="2">
+									<p class="buildingDescription">A nice dog to eat your homework.</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img alt="Dog" srcc="https://lh6.googleusercontent.com/-p8XUdN0Ihb0/VNR5rrnjhXI/AAAAAAAAAA8/3URGjufliRQ/w1600-h1200/photo.jpg" 
+									class="buildingImage" width="50px" height="50px" onclick="buyBuilding('dog')"/>
+								</td>
+								<td>
+									<p id="dogCostDisplay">Cost: 101 Pages</p>
+								</td>
+								<td>
+									<h4 id="dogBuildingDisplay">0</h4>
+								</td>
+							</tr>
+							<tr> <!--Computer Section-->
+								<td>
+									<h3>Computer</h3>
+								</td>
+								<td colspan="2">
+									<p class="buildingDescription">Computer + Homework = "Good grades"</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img alt="Computer" srcc="https://lh3.googleusercontent.com/-F0yEbufozXA/VQDns833VjI/AAAAAAAACJ0/qN5rqsu0of0/w227-h228-p/computer.jpg"
+									class="buildingImage"  width="50px" height="50px" onclick="buyBuilding('computer')"/>
+								</td>
+								<td>
+									<p id="computerCostDisplay">Cost: 442 Pages</p>
+								</td>
+								<td>
+									<h4 id="computerBuildingDisplay">0</h4>
+								</td>
+							</tr>
+							<tr> <!--Library Section-->
+								<td>
+									<h3>Library</h3>
+								</td>
+								<td colspan="2">
+									<p class="buildingDescription">All the information you would possibly need. (and more!)</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img alt="Library" srcc="https://lh5.googleusercontent.com/-JXqt42yXO3U/VRCxzl5hRbI/AAAAAAAACLA/9-IFLtaOH_U/w269-h162-no/bookshelf.jpg" 
+									class="buildingImage" width="50px" height="50px" onclick="buyBuilding('library')"/>
+								</td>
+								<td>
+									<p id="libraryCostDisplay">Cost: 1027 Pages</p>
+								</td>
+								<td>
+									<h4 id="libraryBuildingDisplay">0</h4>
+								</td>
+							</tr>
+							<tr> <!--Tutor Section-->
+								<td>
+									<h3>Tutor</h3>
+								</td>
+								<td colspan="2">
+									<p class="buildingDescription">Who saclass tutors <i>helped </i>you do homework?</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img alt="Tutor" srcc="https://tupalo.s3.amazonaws.com/s/tampa-florclassa/kumon-of-town-and-country-5143518-fe.jpg"
+									class="buildingImage" width="50px" height="50px" onclick="buyBuilding('tutor')"/>
+								</td>
+								<td>
+									<p id="tutorCostDisplay">Cost: 5678 Pages</p>
+								</td>
+								<td>
+									<h4 id="tutorBuildingDisplay">0</h4>
+								</td>
+							</tr>
+							<tr> <!--Research Institute Section-->
+								<td>
+									<h3>Research Institute</h3>
+								</td>
+								<td colspan="2">
+									<p class="buildingDescription">Filled with books, teachers, and nerds. All ready to help on your quest to do your homework.</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img alt="Research Institute" srcc="http://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-580x288/public/news/research/news/121106heart-and-lung-research-institute.jpg?itok=3DfCO5Kl" 
+									class="buildingImage" width="50px" height="50px"  onclick="buyBuilding('institute')"/>
+								</td>
+								<td>
+									<p id="instituteCostDisplay">Cost: 30000 Pages</p>
+								</td>
+								<td>
+									<h4 id="instituteBuildingDisplay">0</h4>
+								</td>
+							</tr>
+							<tr> <!--Lava Section-->
+								<td>
+									<h3>Lava</h3>
+								</td>
+								<td colspan="2">
+									<p class="buildingDescription">Don't ask.</p>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<img alt="Lava" srcc="http://hydra-media.cursecdn.com/minecraft.gamepedia.com/2/27/Lava.png?version=5a751570cb4de22cba7628f8fe2a3a66" 
+									class="buildingImage" width="50px" height="50px"  onclick="buyBuilding('lava')"/>
+								</td>
+								<td>
+									<p id="lavaCostDisplay">Cost: 169690 Pages</p>
+								</td>
+								<td>
+									<h4 id="lavaBuildingDisplay">0</h4>
+								</td>
+							</tr>
+						</div>
+					</td>
+				</tr>
+			</table>
 		</td>
 	</tr>
-	<tr>
-		<td colspan="3">
-			<div id="interfaceElementHolder">
-			<h1 id="loading">Please wait....</h1>
-			</div>
-		</td>
 </table>
-</div>
-
-<table id="shopWrap">
-	<tr>
-		<td>
-<div id="shop">
-<h2 id="shopHeader">Shop</h2>
-
-<table>
-	<tr> <!--Pencil Section-->
-		<td>
-			<h3>Pencil</h3>
-		</td>
-		<td colspan="2">
-			<p id="buildingDescription" color="blue">In case you break one.</p>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<img alt="Pencil" srcc="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no" 
-			id="buildingImage" width="50px" height="50px" onclick="buyBuilding('pencil')"/>
-		</td>
-		<td>
-			<p id="pencilCostDisplay">Cost: 25 Pages</p>
-		</td>
-		<td>
-			<h4 id="pencilBuildingDisplay">0</h4>
-		</td>
-	</tr>
-	<br />
-	<tr> <!--Dog Section-->
-		<td>
-			<h3>Dog</h3>
-		</td>
-		<td colspan="2">
-			<p id="buildingDescription">A nice dog to eat your homework.</p>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<img alt="Dog" srcc="https://lh6.googleusercontent.com/-p8XUdN0Ihb0/VNR5rrnjhXI/AAAAAAAAAA8/3URGjufliRQ/w1600-h1200/photo.jpg" 
-			id="buildingImage" width="50px" height="50px" onclick="buyBuilding('dog')"/>
-		</td>
-		<td>
-			<p id="dogCostDisplay">Cost: 101 Pages</p>
-		</td>
-		<td>
-			<h4 id="dogBuildingDisplay">0</h4>
-		</td>
-	</tr>
-	<tr> <!--Computer Section-->
-		<td>
-			<h3>Computer</h3>
-		</td>
-		<td colspan="2">
-			<p id="buildingDescription">Computer + Homework = "Good grades"</p>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<img alt="Computer" srcc="https://lh3.googleusercontent.com/-F0yEbufozXA/VQDns833VjI/AAAAAAAACJ0/qN5rqsu0of0/w227-h228-p/computer.jpg"
-			id="buildingImage"  width="50px" height="50px" onclick="buyBuilding('computer')"/>
-		</td>
-		<td>
-			<p id="computerCostDisplay">Cost: 442 Pages</p>
-		</td>
-		<td>
-			<h4 id="computerBuildingDisplay">0</h4>
-		</td>
-	</tr>
-	<tr> <!--Library Section-->
-		<td>
-			<h3>Library</h3>
-		</td>
-		<td colspan="2">
-			<p id="buildingDescription">All the information you would possibly need. (and more!)</p>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<img alt="Library" srcc="https://lh5.googleusercontent.com/-JXqt42yXO3U/VRCxzl5hRbI/AAAAAAAACLA/9-IFLtaOH_U/w269-h162-no/bookshelf.jpg" 
-			id="buildingImage" width="50px" height="50px" onclick="buyBuilding('library')"/>
-		</td>
-		<td>
-			<p id="libraryCostDisplay">Cost: 1027 Pages</p>
-		</td>
-		<td>
-			<h4 id="libraryBuildingDisplay">0</h4>
-		</td>
-	</tr>
-	<tr> <!--Tutor Section-->
-		<td>
-			<h3>Tutor</h3>
-		</td>
-		<td colspan="2">
-			<p id="buildingDescription">Who said tutors <i>helped </i>you do homework?</p>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<img alt="Tutor" srcc="https://tupalo.s3.amazonaws.com/s/tampa-florida/kumon-of-town-and-country-5143518-fe.jpg"
-			id="buildingImage" width="50px" height="50px" onclick="buyBuilding('tutor')"/>
-		</td>
-		<td>
-			<p id="tutorCostDisplay">Cost: 5678 Pages</p>
-		</td>
-		<td>
-			<h4 id="tutorBuildingDisplay">0</h4>
-		</td>
-	</tr>
-	<tr> <!--Research Institute Section-->
-		<td>
-			<h3>Research Institute</h3>
-		</td>
-		<td colspan="2">
-			<p id="buildingDescription">Filled with books, teachers, and nerds. All ready to help on your quest to do your homework.</p>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<img alt="Research Institute" srcc="http://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-580x288/public/news/research/news/121106heart-and-lung-research-institute.jpg?itok=3DfCO5Kl" 
-			id="buildingImage" width="50px" height="50px"  onclick="buyBuilding('institute')"/>
-		</td>
-		<td>
-			<p id="instituteCostDisplay">Cost: 30000 Pages</p>
-		</td>
-		<td>
-			<h4 id="instituteBuildingDisplay">0</h4>
-		</td>
-	</tr>
-	<tr> <!--Lava Section-->
-		<td>
-			<h3>Lava</h3>
-		</td>
-		<td colspan="2">
-			<p id="buildingDescription">Don't ask.</p>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<img alt="Lava" srcc="http://hydra-media.cursecdn.com/minecraft.gamepedia.com/2/27/Lava.png?version=5a751570cb4de22cba7628f8fe2a3a66" 
-			id="buildingImage" width="50px" height="50px"  onclick="buyBuilding('lava')"/>
-		</td>
-		<td>
-			<p id="lavaCostDisplay">Cost: 169690 Pages</p>
-		</td>
-		<td>
-			<h4 id="lavaBuildingDisplay">0</h4>
-		</td>
-	</tr>
-</table>
-</div>
-		</td>
-	</tr>
-	<tr>
-		<td>
-		<p id="messages"></p>
-		</td>
-	</tr>
-</table>
-
-</div>
 </body>
 </html>
