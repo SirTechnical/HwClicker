@@ -133,9 +133,9 @@ q {
 	background-color:#99CCFF;
 }
 td {
-	padding:0px;
-	margin:0px;
-	border:0px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
 }
 /*========================================== Misc. Styles Start here =============================*/
 img, button, .toggleInterfaceHolder {
@@ -430,18 +430,23 @@ function processSave(method) {
 			}
 		}
 		else {
-			alert("You are importing an outdated save from HwClicker v1.4.1. Load in your saves and export them again to convert them to v1.4.6 ones. If this is not the case, contact Kevin.");
 			var splitSave = completeSave[0].split(";");
-			Game.hwDone = parseInt(splitSave[0]);
-			Game.pagesPerSecond = parseFloat(splitSave[1]);
-			var index = 2;
-			for (var i in buildings) {
-				buildings[i].amount = parseInt(splitSave[index]);
-				index++;
+			if (splitSave.length == 17) {
+				alert("You are importing an outdated save from HwClicker v1.4.1. Load in your saves and export them again to convert them to v1.4.6 ones. If this is not the case, contact Kevin.");
+				Game.hwDone = parseInt(splitSave[0]);
+				Game.pagesPerSecond = parseFloat(splitSave[1]);
+				var index = 2;
+				for (var i in buildings) {
+					buildings[i].amount = parseInt(splitSave[index]);
+					index++;
+				}
+				for (var i in buildings) {
+					buildings[i].cost = parseInt(splitSave[index]);
+					index++;
+				}
 			}
-			for (var i in buildings) {
-				buildings[i].cost = parseInt(splitSave[index]);
-				index++;
+			else {
+				notice("Something's wrong with your save!");
 			}
 		}
 	}
@@ -466,7 +471,7 @@ interfaceArea.menuPart = '<h2 id="menuHeader">Menu</h2>'+
 interfaceArea.statsPart = '<h2 id="statsHeader">Stats</h2>'+
 '<h3 id="achievementsHeader">Achievements</h3>'
 
-//===================UPGRADES====================
+//===================UPDATES====================
 interfaceArea.updatesPart = '<h2 id="updateHeader">Updates:</h2>' + 
 '<h4>Version 1.5</h4><h3>Sometime in the future</h3><ul>' +
 	"<li>You can now export and import your saves!</li>" +
@@ -474,7 +479,7 @@ interfaceArea.updatesPart = '<h2 id="updateHeader">Updates:</h2>' +
 	//"<li>Added the answer to life, the universe and everyting.</li>" +
 '</ul><h4>Version 1.4.6</h4><h3>May 22, 2015</h3><ul>' +
 	"<li>Major milestone for Homework Clicker! The code is now much more efficient for future updates, and the base has been laid for 1.5, the big one!</li>" +
-	'<li>The notorious pencil bug has retured!</li>'+
+	'<li>The notorious pencil bug has returned!</li>'+
 '</ul><h4>Version 1.4</h4><ul>' +
 	"<li>Introducing more buildings including the research institute and lava! What are they for? Don't ask.</li>" +
 	'<li>Minor bugfixes such as when buying more than 3 pencils creates many digits behind the decimal point.</li>'+
@@ -532,7 +537,7 @@ function changeNews() {
 			<h1 id="hwDoneDisplay">Pages of Homework Done: 0</h1>
 			<h4 id="ppsDisplay">Pages per second: 0</h4>
 			<p>Click image to do homework</p>
-			<img alt="Click to do homework" id="hwImage" srcc="https://lh6.googleusercontent.com/-F5Cea2oeyBc/VRHeEEzujEI/AAAAAAAACMY/1s9gqe_nf7U/w419-h542-no/homework.jpg" width="250px" height="300px"  onclick="doHw()"/>
+			<img alt="Click to do homework" id="hwImage" src="https://lh6.googleusercontent.com/-F5Cea2oeyBc/VRHeEEzujEI/AAAAAAAACMY/1s9gqe_nf7U/w419-h542-no/homework.jpg" width="250px" height="300px"  onclick="doHw()"/>
 		</td>
 		<td id="statsSection">
 			<table id="interfaceMenuFrame" border="0">
@@ -567,160 +572,151 @@ function changeNews() {
 			<table id="shopWrap">
 				<tr>
 					<td>
-						<tr>
-							<td colspan="2">
-								<h2 id="shopHeader">Shop</h2>
-							</td>
-						</tr>
-						<tr>
-							<td class="toggleShopHolder" onclick="viewShopSection('buildings')">	
-								<h3 class="interfaceHeader">Buildings</h3>
-							</td>
-							<td class="toggleShopHolder" onclick="viewShopSection('upgrades')">	
-								<h3 class="interfaceHeader">Upgrades</h3>
-							</td>
-						</tr>
 						<div id="shop">
-							<tr> <!--Pencil Section-->
-								<td>
-									<h3>Pencil</h3>
-								</td>
-								<td colspan="2">
-									<p class="buildingDescription" color="blue">In case you break one.</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<img alt="Pencil" srcc="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no" 
-									class="buildingImage" width="50px" height="50px" onclick="buyBuilding('pencil')"/>
-								</td>
-								<td>
-									<p id="pencilCostDisplay">Cost: 25 Pages</p>
-								</td>
-								<td>
-									<h4 id="pencilBuildingDisplay">0</h4>
-								</td>
-							</tr>
-							<tr> <!--Dog Section-->
-								<td>
-									<h3>Dog</h3>
-								</td>
-								<td colspan="2">
-									<p class="buildingDescription">A nice dog to eat your homework.</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<img alt="Dog" srcc="https://lh6.googleusercontent.com/-p8XUdN0Ihb0/VNR5rrnjhXI/AAAAAAAAAA8/3URGjufliRQ/w1600-h1200/photo.jpg" 
-									class="buildingImage" width="50px" height="50px" onclick="buyBuilding('dog')"/>
-								</td>
-								<td>
-									<p id="dogCostDisplay">Cost: 101 Pages</p>
-								</td>
-								<td>
-									<h4 id="dogBuildingDisplay">0</h4>
-								</td>
-							</tr>
-							<tr> <!--Computer Section-->
-								<td>
-									<h3>Computer</h3>
-								</td>
-								<td colspan="2">
-									<p class="buildingDescription">Computer + Homework = "Good grades"</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<img alt="Computer" srcc="https://lh3.googleusercontent.com/-F0yEbufozXA/VQDns833VjI/AAAAAAAACJ0/qN5rqsu0of0/w227-h228-p/computer.jpg"
-									class="buildingImage"  width="50px" height="50px" onclick="buyBuilding('computer')"/>
-								</td>
-								<td>
-									<p id="computerCostDisplay">Cost: 442 Pages</p>
-								</td>
-								<td>
-									<h4 id="computerBuildingDisplay">0</h4>
-								</td>
-							</tr>
-							<tr> <!--Library Section-->
-								<td>
-									<h3>Library</h3>
-								</td>
-								<td colspan="2">
-									<p class="buildingDescription">All the information you would possibly need. (and more!)</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<img alt="Library" srcc="https://lh5.googleusercontent.com/-JXqt42yXO3U/VRCxzl5hRbI/AAAAAAAACLA/9-IFLtaOH_U/w269-h162-no/bookshelf.jpg" 
-									class="buildingImage" width="50px" height="50px" onclick="buyBuilding('library')"/>
-								</td>
-								<td>
-									<p id="libraryCostDisplay">Cost: 1027 Pages</p>
-								</td>
-								<td>
-									<h4 id="libraryBuildingDisplay">0</h4>
-								</td>
-							</tr>
-							<tr> <!--Tutor Section-->
-								<td>
-									<h3>Tutor</h3>
-								</td>
-								<td colspan="2">
-									<p class="buildingDescription">Who saclass tutors <i>helped </i>you do homework?</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<img alt="Tutor" srcc="https://tupalo.s3.amazonaws.com/s/tampa-florclassa/kumon-of-town-and-country-5143518-fe.jpg"
-									class="buildingImage" width="50px" height="50px" onclick="buyBuilding('tutor')"/>
-								</td>
-								<td>
-									<p id="tutorCostDisplay">Cost: 5678 Pages</p>
-								</td>
-								<td>
-									<h4 id="tutorBuildingDisplay">0</h4>
-								</td>
-							</tr>
-							<tr> <!--Research Institute Section-->
-								<td>
-									<h3>Research Institute</h3>
-								</td>
-								<td colspan="2">
-									<p class="buildingDescription">Filled with books, teachers, and nerds. All ready to help on your quest to do your homework.</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<img alt="Research Institute" srcc="http://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-580x288/public/news/research/news/121106heart-and-lung-research-institute.jpg?itok=3DfCO5Kl" 
-									class="buildingImage" width="50px" height="50px"  onclick="buyBuilding('institute')"/>
-								</td>
-								<td>
-									<p id="instituteCostDisplay">Cost: 30000 Pages</p>
-								</td>
-								<td>
-									<h4 id="instituteBuildingDisplay">0</h4>
-								</td>
-							</tr>
-							<tr> <!--Lava Section-->
-								<td>
-									<h3>Lava</h3>
-								</td>
-								<td colspan="2">
-									<p class="buildingDescription">Don't ask.</p>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<img alt="Lava" srcc="http://hydra-media.cursecdn.com/minecraft.gamepedia.com/2/27/Lava.png?version=5a751570cb4de22cba7628f8fe2a3a66" 
-									class="buildingImage" width="50px" height="50px"  onclick="buyBuilding('lava')"/>
-								</td>
-								<td>
-									<p id="lavaCostDisplay">Cost: 169690 Pages</p>
-								</td>
-								<td>
-									<h4 id="lavaBuildingDisplay">0</h4>
-								</td>
-							</tr>
+							<h2 id="shopHeader">Shop</h2>
+							<table>
+								<tr> <!--Pencil Section-->
+									<td>
+										<h3>Pencil</h3>
+									</td>
+									<td colspan="2">
+										<p class="buildingDescription" color="blue">In case you break one.</p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img alt="Pencil" src="https://lh5.googleusercontent.com/Mh0USS6eOyKhM71Rg7ZHCUa8orsQokhhMIxId8Dwtrg=w204-h181-no" 
+										class="buildingImage" width="50px" height="50px" onclick="buyBuilding('pencil')"/>
+									</td>
+									<td>
+										<p id="pencilCostDisplay">Cost: 25 Pages</p>
+									</td>
+									<td>
+										<h4 id="pencilBuildingDisplay">0</h4>
+									</td>
+								</tr>
+								<br />
+								<tr> <!--Dog Section-->
+									<td>
+										<h3>Dog</h3>
+									</td>
+									<td colspan="2">
+										<p class="buildingDescription">A nice dog to eat your homework.</p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img alt="Dog" src="https://lh6.googleusercontent.com/-p8XUdN0Ihb0/VNR5rrnjhXI/AAAAAAAAAA8/3URGjufliRQ/w1600-h1200/photo.jpg" 
+										class="buildingImage" width="50px" height="50px" onclick="buyBuilding('dog')"/>
+									</td>
+									<td>
+										<p id="dogCostDisplay">Cost: 101 Pages</p>
+									</td>
+									<td>
+										<h4 id="dogBuildingDisplay">0</h4>
+									</td>
+								</tr>
+								<tr> <!--Computer Section-->
+									<td>
+										<h3>Computer</h3>
+									</td>
+									<td colspan="2">
+										<p class="buildingDescription">Computer + Homework = "Good grades"</p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img alt="Computer" src="https://lh3.googleusercontent.com/-F0yEbufozXA/VQDns833VjI/AAAAAAAACJ0/qN5rqsu0of0/w227-h228-p/computer.jpg"
+										class="buildingImage"  width="50px" height="50px" onclick="buyBuilding('computer')"/>
+									</td>
+									<td>
+										<p id="computerCostDisplay">Cost: 442 Pages</p>
+									</td>
+									<td>
+										<h4 id="computerBuildingDisplay">0</h4>
+									</td>
+								</tr>
+								<tr> <!--Library Section-->
+									<td>
+										<h3>Library</h3>
+									</td>
+									<td colspan="2">
+										<p class="buildingDescription">All the information you would possibly need. (and more!)</p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img alt="Library" src="https://lh5.googleusercontent.com/-JXqt42yXO3U/VRCxzl5hRbI/AAAAAAAACLA/9-IFLtaOH_U/w269-h162-no/bookshelf.jpg" 
+										class="buildingImage" width="50px" height="50px" onclick="buyBuilding('library')"/>
+									</td>
+									<td>
+										<p id="libraryCostDisplay">Cost: 1027 Pages</p>
+									</td>
+									<td>
+										<h4 id="libraryBuildingDisplay">0</h4>
+									</td>
+								</tr>
+								<tr> <!--Tutor Section-->
+									<td>
+										<h3>Tutor</h3>
+									</td>
+									<td colspan="2">
+										<p class="buildingDescription">Who said tutors <i>helped </i>you do homework?</p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img alt="Tutor" src="https://tupalo.s3.amazonaws.com/s/tampa-florida/kumon-of-town-and-country-5143518-fe.jpg"
+										class="buildingImage" width="50px" height="50px" onclick="buyBuilding('tutor')"/>
+									</td>
+									<td>
+										<p id="tutorCostDisplay">Cost: 5678 Pages</p>
+									</td>
+									<td>
+										<h4 id="tutorBuildingDisplay">0</h4>
+									</td>
+								</tr>
+								<tr> <!--Research Institute Section-->
+									<td>
+										<h3>Research Institute</h3>
+									</td>
+									<td colspan="2">
+										<p class="buildingDescription">Filled with books, teachers, and nerds. All ready to help on your quest to do your homework.</p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img alt="Research Institute" src="http://www.cam.ac.uk/sites/www.cam.ac.uk/files/styles/content-580x288/public/news/research/news/121106heart-and-lung-research-institute.jpg?itok=3DfCO5Kl" 
+										class="buildingImage" width="50px" height="50px"  onclick="buyBuilding('institute')"/>
+									</td>
+									<td>
+										<p id="instituteCostDisplay">Cost: 30000 Pages</p>
+									</td>
+									<td>
+										<h4 id="instituteBuildingDisplay">0</h4>
+									</td>
+								</tr>
+								<tr> <!--Lava Section-->
+									<td>
+										<h3>Lava</h3>
+									</td>
+									<td colspan="2">
+										<p class="buildingDescription">Don't ask.</p>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<img alt="Lava" src="http://hydra-media.cursecdn.com/minecraft.gamepedia.com/2/27/Lava.png?version=5a751570cb4de22cba7628f8fe2a3a66" 
+										class="buildingImage" width="50px" height="50px"  onclick="buyBuilding('lava')"/>
+									</td>
+									<td>
+										<p id="lavaCostDisplay">Cost: 169690 Pages</p>
+									</td>
+									<td>
+										<h4 id="lavaBuildingDisplay">0</h4>
+									</td>
+								</tr>
+							</table>
 						</div>
 					</td>
 				</tr>
